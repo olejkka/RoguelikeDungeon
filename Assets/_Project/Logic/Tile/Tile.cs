@@ -1,38 +1,65 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    [SerializeField] private bool _isWall;
     [SerializeField] private GameObject _spawnPoint;
-    private bool _isSpawnPoint;
     
-    public Vector2 Position { get; private set; }
-    public Enemy Enemy { get; set; }
-    public bool IsSpawnPoint 
+    private Vector2Int _position;
+    private bool _isHighlighted;
+    private bool _isWall;
+    private bool _isSpawnPoint;
+    private Character _occupiedCharacter;
+    private TileHighlightVisuals _visuals;
+    
+    public Vector2Int Position { get { return _position; } set { _position = value; } }
+    public bool IsHighlighted { get { return _isHighlighted; } set { _isHighlighted = value; } }
+    public bool IsWall { get { return _isWall; } set { _isWall = value; } }
+    public bool IsSpawnPoint { get { return _isSpawnPoint; } set { _isSpawnPoint = value; } }
+    public Character OccupiedCharacter { get { return _occupiedCharacter; } set { _occupiedCharacter = value; } }
+    public TileHighlightVisuals Visuals => _visuals;
+    
+    private void Awake()
     {
-        get
-        {
-            return _isSpawnPoint;
-        }
-        set
-        {
-            _isSpawnPoint = value;
-        }
+        _visuals = GetComponentInChildren<TileHighlightVisuals>();
+        _visuals.highlightEmptyTile?.SetActive(false);
+        _visuals.highlightEnemyTile?.SetActive(false);
+        _visuals.hoverHighlightTile?.SetActive(false);
     }
-
-    void Awake()
+    
+    public void Initialize()
     {
-        Initialize();
-    }
-
-    void Initialize()
-    {
-        Position = transform.position;
+        Position = new Vector2Int(
+            Mathf.RoundToInt(transform.position.x),
+            Mathf.RoundToInt(transform.position.z)
+        );
     }
     
     public bool TryGetSpawnPoint(out Transform point)
     {
         point = _spawnPoint != null ? _spawnPoint.transform : null;
         return point != null;
+    }
+    
+    public List<Tile> GetNeighbors(NeighborTilesSelectionSO settings)
+    {
+        if (settings == null) return new List<Tile>();
+
+        var offsets = settings.GetOffsets();
+        List<Tile> result = new List<Tile>();
+
+        foreach (var offset in offsets)
+        {
+            Tile neighbor = TilesRepository.Instance.GetTileAt(Position + offset);
+            if (neighbor != null)
+                result.Add(neighbor);
+        }
+
+        return result;
+    }
+    
+    public void SetHighlighted(bool state)
+    {
+        IsHighlighted = state;
     }
 }

@@ -1,10 +1,14 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayerFactory : MonoBehaviour
 {
-    [SerializeField] private Player _playerPrefab;
+    public static event Action OnPlayerCreated;
+    
+    [FormerlySerializedAs("_playerPrefab")] [SerializeField] private Character characterPrefab;
 
-    public Player Generate()
+    public Character Generate()
     {
         Transform spawnPoint = FindSpawnPointTransform();
         if (spawnPoint == null)
@@ -12,8 +16,11 @@ public class PlayerFactory : MonoBehaviour
             Debug.LogError("Точка спавна не найдена (Tile.IsSpawnPoint == true, но поле _spawnPoint не задано)");
             return null;
         }
+        var player = Instantiate(characterPrefab, spawnPoint.position, Quaternion.identity);
+        
+        OnPlayerCreated?.Invoke();
 
-        return Instantiate(_playerPrefab, spawnPoint.position, Quaternion.identity);
+        return player;
     }
 
     private Transform FindSpawnPointTransform()

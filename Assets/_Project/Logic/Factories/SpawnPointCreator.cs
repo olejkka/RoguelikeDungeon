@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -6,27 +7,19 @@ public class SpawnPointCreator : MonoBehaviour
 {
     public static event Action OnSpawnPointCreated;
 
-    private void OnEnable()
-    {
-        TileFactory.OnBoardGenerated += CreateSpawnPoint;
-    }
-
-    private void OnDisable()
-    {
-        TileFactory.OnBoardGenerated -= CreateSpawnPoint;
-    }
-
     public void CreateSpawnPoint()
     {
-        Tile[] allTiles = FindObjectsOfType<Tile>();
+        Tile[] availableTiles = FindObjectsOfType<Tile>()
+            .Where(tile => tile.IsWall == false)
+            .ToArray();
 
-        if (allTiles.Length == 0)
+        if (availableTiles.Length == 0)
         {
             Debug.LogWarning("Нет доступных тайлов для спавна.");
             return;
         }
 
-        Tile selectedTile = allTiles[Random.Range(0, allTiles.Length)];
+        Tile selectedTile = availableTiles[Random.Range(0, availableTiles.Length)];
         selectedTile.IsSpawnPoint = true;
         
         OnSpawnPointCreated?.Invoke();

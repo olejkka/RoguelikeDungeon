@@ -3,29 +3,54 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    [SerializeField] private float movementSpeed = 5.0f;
-    private Player _player;
+    private Character _character;
+    [SerializeField] private float _jumpPower = 5f;
+    [SerializeField] private int _numJumps = 2;
+    [SerializeField] private float _durationOfJump = 1f;
+    [SerializeField] private float _durationOfRotate = 0.2f;
+    
+    public bool IsMoving { get; set; }
     
     private void Awake()
     {
-        _player = GetComponent<Player>();
+        _character = GetComponent<Character>();
     }
 
     public void Move(Tile targetTile)
     {
-        Vector3 direction = (targetTile.transform.position - _player.transform.position).normalized;
-        Vector3 lookAtTarget = _player.transform.position + direction;
+        if (targetTile == _character.CurrentTile)
+            return;
         
-        _player.transform.DOLookAt(lookAtTarget, 1, AxisConstraint.Y).OnComplete(() =>
+        if (targetTile.IsWall)
+            return;
+        
+        if(targetTile.IsHighlighted == false)
+            return;
+        
+        if (IsMoving == false)
         {
-            Vector3 finalPos = new Vector3(
-                Mathf.Round(targetTile.transform.position.x),
-                _player.transform.position.y,
-                Mathf.Round(targetTile.transform.position.z)
-            );
+            IsMoving = true;
+            
+            Vector3 direction = (targetTile.transform.position - _character.transform.position).normalized;
+            Vector3 lookAtTarget = _character.transform.position + direction;
 
-            _player.transform.DOJump(finalPos, 1, 1, 1)
-                .SetEase(Ease.Linear);
-        });
+            _character.transform.DOKill(true);
+            _character.transform.DOLookAt(lookAtTarget, _durationOfRotate, AxisConstraint.Y).OnComplete(() =>
+            {
+                Vector3 finalPos = new Vector3(
+                    Mathf.Round(targetTile.transform.position.x),
+                    _character.transform.position.y,
+                    Mathf.Round(targetTile.transform.position.z)
+                );
+
+                _character.transform.DOJump(finalPos, _jumpPower, _numJumps, _durationOfJump)
+                    .SetEase(Ease.Linear)
+                    .OnComplete(() =>
+                    {
+                        _character.CurrentTile = targetTile;
+                        IsMoving = false;
+                    });
+            });
+        }
     }
 }
