@@ -1,15 +1,17 @@
-﻿using DG.Tweening;
+﻿using System;
+using DG.Tweening;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    private Character _character;
+    
     [SerializeField] private float _jumpPower = 5f;
     [SerializeField] private int _numJumps = 2;
     [SerializeField] private float _durationOfJump = 1f;
     [SerializeField] private float _durationOfRotate = 0.2f;
-    
+    private Character _character;
     private TileHighlighter _highlighter;
+    public static event Action OnSteppingOnATransitionTile;
     
     public bool IsMoving { get; set; }
     
@@ -50,9 +52,14 @@ public class Movement : MonoBehaviour
                     .OnComplete(() =>
                     {
                         _character.CurrentTile = targetTile;
+                        
+                        if (targetTile.Type == TileType.Transition)
+                            OnSteppingOnATransitionTile?.Invoke();
+                        
                         IsMoving = false;
                     });
             });
         }
     }
 }
+

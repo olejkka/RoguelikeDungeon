@@ -5,7 +5,6 @@ using UnityEngine;
 public class CharacterMoveLogic : MonoBehaviour
 {
     private Character character;
-    private bool needsHighlight = true;
 
 
     private void OnEnable()
@@ -26,11 +25,13 @@ public class CharacterMoveLogic : MonoBehaviour
     void OnPlayerCreatedHandler()
     {
         character = FindObjectOfType<Player>();
-        
     }
     
     public void HighlightAvailableToMoveTiles()
     {
+        if (character == null)
+            return;
+        
         if (character.CurrentTile == null)
         {
             Debug.LogWarning($"[FigureLogic] Character {character.gameObject.name} не может найти текущую клетку!");

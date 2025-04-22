@@ -163,6 +163,95 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36c9478a5fc344d2a76ce6821918f6a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &149024595
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 149024596}
+  - component: {fileID: 149024597}
+  m_Layer: 0
+  m_Name: TransitionPointCreator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &149024596
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 149024595}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1576817741}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &149024597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 149024595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8855502f487a4f72b5273f0fda54f645, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _transitionMaterial: {fileID: 2100000, guid: 94928c66163024249b5f42286035d5ea, type: 2}
+--- !u!1 &278451516
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 278451517}
+  - component: {fileID: 278451518}
+  m_Layer: 0
+  m_Name: LevelLoader
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &278451517
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 278451516}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 917855266}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &278451518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 278451516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a53fe7021f440f3874010a272b5b718, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -647,6 +736,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1022011840}
+  - {fileID: 278451517}
   - {fileID: 1564183910}
   - {fileID: 1576817741}
   m_Father: {fileID: 0}
@@ -730,7 +820,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _tileFactory: {fileID: 1057342154}
   _playerFactory: {fileID: 1815872734}
+  _enemyFactory: {fileID: 1050353480}
   _spawnPointCreator: {fileID: 764394470}
+  _transitionPointCreator: {fileID: 149024597}
   _tileHighlighter: {fileID: 107916908}
   _cameraFollower: {fileID: 330585548}
   _cameraRotator: {fileID: 993066539}
@@ -794,7 +886,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyPrefab: {fileID: 2528740651555039304, guid: 1026cf80732acd541960ffbb822648b0, type: 3}
-  _enemyCount: 3
+  _enemyCount: 2
 --- !u!1 &1057342153
 GameObject:
   m_ObjectHideFlags: 0
@@ -877,8 +969,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1815872733}
-  - {fileID: 737756047}
   - {fileID: 1050353479}
+  - {fileID: 737756047}
   m_Father: {fileID: 917855266}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1576817740
@@ -911,8 +1003,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1057342155}
-  - {fileID: 771368121}
   - {fileID: 764394469}
+  - {fileID: 149024596}
+  - {fileID: 771368121}
   - {fileID: 1682728682}
   - {fileID: 107916907}
   m_Father: {fileID: 917855266}

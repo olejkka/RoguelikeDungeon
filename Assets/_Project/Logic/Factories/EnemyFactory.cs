@@ -8,18 +8,9 @@ public class EnemyFactory : MonoBehaviour
 {
     [SerializeField] private GameObject _enemyPrefab;
     [SerializeField] private int _enemyCount = 3;
+    
 
-    private void OnEnable()
-    {
-        SpawnPointCreator.OnSpawnPointCreated += SpawnEnemies;
-    }
-
-    private void OnDisable()
-    {
-        SpawnPointCreator.OnSpawnPointCreated -= SpawnEnemies;
-    }
-
-    private void SpawnEnemies()
+    public void SpawnEnemies()
     {
         Tile spawnTile = FindSpawnTile();
         if (spawnTile == null)

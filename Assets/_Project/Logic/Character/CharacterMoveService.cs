@@ -17,7 +17,7 @@ public static class CharacterMoveService
         );
 
         return rawMoves
-            .Where(tile => tile.Type != TileType.Wall)
+            .Where(TileRules.IsWalkable)
             .Where(tile =>
                 tile.OccupiedCharacter == null ||
                 CharacterIdentifier.IsEnemy(character, tile.OccupiedCharacter))

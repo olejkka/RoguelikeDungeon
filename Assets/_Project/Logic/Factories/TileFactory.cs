@@ -4,7 +4,7 @@ using UnityEngine.Serialization;
 
 public class TileFactory : MonoBehaviour
 {
-    public static event Action OnBoardGenerated;
+    public static event Action OnRoomGenerated;
 
     [FormerlySerializedAs("tilePrefab")]
     [Header("Tile Prefabs")]
@@ -31,7 +31,7 @@ public class TileFactory : MonoBehaviour
         }
     }
 
-    public void GenerateBoard()
+    public void GenerateRoom()
     {
         ClearTiles();
 
@@ -71,6 +71,6 @@ public class TileFactory : MonoBehaviour
             }
         }
 
-        OnBoardGenerated?.Invoke();
+        OnRoomGenerated?.Invoke();
     }
 }

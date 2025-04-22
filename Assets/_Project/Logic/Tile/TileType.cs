@@ -4,4 +4,5 @@
     Floor,
     Wall,
     Spawn,
+    Transition,
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+[DefaultExecutionOrder(-200)]
 public class TilesRepository : MonoBehaviour
 {
     private Dictionary<Vector2Int, Tile> _tiles = new();

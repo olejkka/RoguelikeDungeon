@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 680272b7ef2219849ba64d0297ce7bf8, type: 2}
+  - {fileID: 2100000, guid: 94928c66163024249b5f42286035d5ea, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -140,11 +140,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5235159573459009062, guid: 5218658ba087a2149999b349e2c4dee8, type: 3}
       propertyPath: _type
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6509085427475877457, guid: 5218658ba087a2149999b349e2c4dee8, type: 3}
       propertyPath: m_Name
-      value: TileFloor
+      value: TileTransition
       objectReference: {fileID: 0}
     - target: {fileID: 9031286953614341196, guid: 5218658ba087a2149999b349e2c4dee8, type: 3}
       propertyPath: _visualRoot

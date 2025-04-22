@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+[DefaultExecutionOrder(-100)]
 public class TileRegistrator : MonoBehaviour
 {
     public static TileRegistrator Instance { get; private set; }
@@ -18,15 +19,15 @@ public class TileRegistrator : MonoBehaviour
     
     private void OnEnable()
     {
-        TileFactory.OnBoardGenerated += OnBoardGeneratedHandler;
+        TileFactory.OnRoomGenerated += OnRoomGeneratedHandler;
     }
 
     private void OnDisable()
     {
-        TileFactory.OnBoardGenerated -= OnBoardGeneratedHandler;
+        TileFactory.OnRoomGenerated -= OnRoomGeneratedHandler;
     }
 
-    void OnBoardGeneratedHandler()
+    void OnRoomGeneratedHandler()
     {
         RegisterAllTiles();
     }
