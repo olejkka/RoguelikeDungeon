@@ -7,8 +7,19 @@ using Random = UnityEngine.Random;
 public class EnemyFactory : MonoBehaviour
 {
     [SerializeField] private GameObject _enemyPrefab;
-    [SerializeField] private int _enemyCount = 3;
-    
+    [SerializeField] private int _enemyCount = 1;
+    public static EnemyFactory Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
 
     public void SpawnEnemies()
     {

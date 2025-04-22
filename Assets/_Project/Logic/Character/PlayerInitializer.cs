@@ -2,6 +2,20 @@
 
 public class PlayerInitializer : MonoBehaviour
 {
+    public static PlayerInitializer Instance { get; private set; }
+
+    
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+    
     private void OnEnable()
     {
         PlayerFactory.OnPlayerCreated += OnPlayerCreatedHandler;

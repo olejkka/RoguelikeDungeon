@@ -4,6 +4,19 @@ using System.Collections.Generic;
 public class TileHighlighter : MonoBehaviour
 {
     private List<Tile> highlightedTiles = new List<Tile>();
+    public static TileHighlighter Instance { get; private set; }
+
+    
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
 
     public void HighlightEmptyTiles(List<Tile> tiles)
     {

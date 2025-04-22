@@ -3,16 +3,40 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+/// <summary>
+/// Отвечает за создание и удаление точки перехода на следующий уровень.
+/// Будет размещаться максимально далеко от точки спавна.
+/// </summary>
 public class TransitionPointCreator : MonoBehaviour
 {
     public static event Action OnTransitionPointCreated;
+    public static TransitionPointCreator Instance { get; private set; }
 
     [Header("Transition Material")]
     [SerializeField] private Material _transitionMaterial;
-    
 
+    private Tile _currentTransitionTile;
+    private Material _originalMaterial;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+
+    /// <summary>
+    /// Создаёт новую точку перехода, предварительно удалив старую.
+    /// Размещается максимально далеко от spawn точки.
+    /// </summary>
     public void CreateTransitionPoint()
     {
+        ClearTransitionPoint();
+
         if (_transitionMaterial == null)
         {
             Debug.LogError("Transition Material не назначен в инспекторе!");
@@ -20,32 +44,47 @@ public class TransitionPointCreator : MonoBehaviour
         }
 
         Tile[] tiles = FindObjectsOfType<Tile>();
-
-        Tile spawnTile = tiles.FirstOrDefault(tile => tile.Type == TileType.Spawn);
+        Tile spawnTile = tiles.FirstOrDefault(t => t.Type == TileType.Spawn);
         if (spawnTile == null)
         {
             Debug.LogWarning("Spawn tile not found. Can't place transition point.");
             return;
         }
 
-        Tile[] floorTiles = tiles
-            .Where(tile => tile.Type == TileType.Floor && tile != spawnTile)
-            .ToArray();
+        var floorTiles = tiles
+            .Where(t => t.Type == TileType.Floor && t != spawnTile)
+            .ToList();
 
-        if (floorTiles.Length == 0)
+        if (floorTiles.Count == 0)
         {
             Debug.LogWarning("Нет подходящих тайлов для точки перехода.");
             return;
         }
 
-        Tile selected = floorTiles[Random.Range(0, floorTiles.Length)];
+        // Выбираем плиту на максимальном расстоянии (по квадрату) от spawn
+        float maxDistSq = -1f;
+        Tile selected = null;
+        Vector2 spawnPos2 = new Vector2(spawnTile.transform.position.x, spawnTile.transform.position.z);
+        foreach (var tile in floorTiles)
+        {
+            Vector2 pos2 = new Vector2(tile.transform.position.x, tile.transform.position.z);
+            float distSq = (pos2 - spawnPos2).sqrMagnitude;
+            if (distSq > maxDistSq)
+            {
+                maxDistSq = distSq;
+                selected = tile;
+            }
+        }
 
+        _currentTransitionTile = selected;
         selected.Type = TileType.Transition;
 
-        Renderer tileRenderer = selected.GetComponentInChildren<Renderer>();
-        if (tileRenderer != null)
+        // Заменяем материал
+        var renderer = selected.GetComponentInChildren<Renderer>();
+        if (renderer != null)
         {
-            tileRenderer.material = _transitionMaterial;
+            _originalMaterial = renderer.material;
+            renderer.material = _transitionMaterial;
         }
         else
         {
@@ -53,5 +92,22 @@ public class TransitionPointCreator : MonoBehaviour
         }
 
         OnTransitionPointCreated?.Invoke();
+    }
+
+    /// <summary>
+    /// Удаляет предыдущую точку перехода и возвращает плиту в исходное состояние.
+    /// </summary>
+    public void ClearTransitionPoint()
+    {
+        if (_currentTransitionTile != null)
+        {
+            _currentTransitionTile.Type = TileType.Floor;
+            var renderer = _currentTransitionTile.GetComponentInChildren<Renderer>();
+            if (renderer != null && _originalMaterial != null)
+                renderer.material = _originalMaterial;
+
+            _currentTransitionTile = null;
+            _originalMaterial = null;
+        }
     }
 }

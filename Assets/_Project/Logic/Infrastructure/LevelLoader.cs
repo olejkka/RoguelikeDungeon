@@ -1,30 +1,29 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-[DefaultExecutionOrder(0)]
+
 public class LevelLoader : MonoBehaviour
 {
+    [SerializeField] private CameraController _cameraController;
     public static LevelLoader Instance { get; private set; }
-    
+
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
+            return;
         }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
-    
+
     private void OnEnable()
     {
-        TileFactory.OnRoomGenerated += CreateSpawnPoint;
-        SpawnPointCreator.OnSpawnPointCreated += CreateTransitionPoint;
-        SpawnPointCreator.OnSpawnPointCreated += CreatePlayer;
-        SpawnPointCreator.OnSpawnPointCreated += CreateEnemies;
-        Movement.OnSteppingOnATransitionTile += LoadNewLevel;
+        TileRegistrator.OnTilesRegistered += HandleTilesRegistered;
+        SpawnPointCreator.OnSpawnPointCreated += HandleSpawnPointCreated;
+        Movement.OnSteppingOnATransitionTile += ReloadCurrentScene;
     }
 
     private void Start()
@@ -34,40 +33,59 @@ public class LevelLoader : MonoBehaviour
 
     private void OnDisable()
     {
-        TileFactory.OnRoomGenerated -= CreateSpawnPoint;
-        SpawnPointCreator.OnSpawnPointCreated -= CreateTransitionPoint;
-        SpawnPointCreator.OnSpawnPointCreated -= CreatePlayer;
-        SpawnPointCreator.OnSpawnPointCreated -= CreateEnemies;
-        Movement.OnSteppingOnATransitionTile -= LoadNewLevel;
+        TileRegistrator.OnTilesRegistered -= HandleTilesRegistered;
+        SpawnPointCreator.OnSpawnPointCreated -= HandleSpawnPointCreated;
+        Movement.OnSteppingOnATransitionTile -= ReloadCurrentScene;
     }
-
+    
+    
     public void LoadNewLevel()
     {
-        Bootstrapper.Instance.TileFactory.ClearTiles();
-        Bootstrapper.Instance.TileFactory.GenerateRoom();
-    }
+        ClearEntities();
+        TilesRepository.Instance.ClearTiles();
+        TileFactory.Instance.ClearTiles();
 
-    private void CreateSpawnPoint()
-    {
-        Bootstrapper.Instance.SpawnPointCreator.CreateSpawnPoint();
-    }
+        // Генерируем комнату и получаем её transform
+        Transform roomTransform = TileFactory.Instance.GenerateRoom();
 
-    private void CreateTransitionPoint()
-    {
-        Bootstrapper.Instance.TransitionPointCreator.CreateTransitionPoint();
+        // Устанавливаем камеру следить за комнатой
+        if (_cameraController != null && roomTransform != null)
+            _cameraController.SetTarget(roomTransform);
     }
-
-    private void CreatePlayer()
+    
+    private void HandleTilesRegistered()
     {
-        Player player = Bootstrapper.Instance.PlayerFactory.Generate() as Player;
+        SpawnPointCreator.Instance.CreateSpawnPoint();
+        TransitionPointCreator.Instance.CreateTransitionPoint();
+    }
+    
+    private void HandleSpawnPointCreated()
+    {
+        var player = PlayerFactory.Instance.Generate() as Player;
         
-        Bootstrapper.Instance.CameraFollower.SetTarget(player.transform);
-        Bootstrapper.Instance.CameraRotator.SetTarget(player.transform);
+        _cameraController.SetTarget(player.transform);
 
+        EnemyFactory.Instance.SpawnEnemies();
     }
 
-    private void CreateEnemies()
+   
+    private void ClearEntities()
     {
-        Bootstrapper.Instance.EnemyFactory.SpawnEnemies();
+        var oldPlayer = FindObjectOfType<Player>();
+        if (oldPlayer != null)
+            Destroy(oldPlayer.gameObject);
+
+        foreach (var enemy in FindObjectsOfType<Enemy>())
+            Destroy(enemy.gameObject);
+    }
+
+    void ReloadCurrentScene()
+    {
+        ClearEntities();
+        TilesRepository.Instance.ClearTiles();
+        TileFactory.Instance.ClearTiles();
+        
+        var sceneName = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(sceneName);
     }
 }

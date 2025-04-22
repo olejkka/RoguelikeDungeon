@@ -1,36 +1,83 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Bootstrapper : MonoBehaviour
 {
-    [SerializeField] private TileFactory _tileFactory;
-    [SerializeField] private PlayerFactory _playerFactory;
-    [SerializeField] private EnemyFactory _enemyFactory;
-    [SerializeField] private SpawnPointCreator _spawnPointCreator;
-    [SerializeField] private TransitionPointCreator _transitionPointCreator;
-    [SerializeField] private TileHighlighter _tileHighlighter;
-    [SerializeField] private CameraFollower _cameraFollower;
-    [SerializeField] private CameraRotator _cameraRotator;
+    [Header("Scenes")]
+    [SerializeField] private string _mainScene = "Main";
+
+    [Header("Prefabs")]
+    [SerializeField] private GameObject _tileFactoryPrefab;
+    [SerializeField] private GameObject _playerFactoryPrefab;
+    [SerializeField] private GameObject _enemyFactoryPrefab;
+    [SerializeField] private GameObject _spawnPointCreatorPrefab;
+    [SerializeField] private GameObject _transitionPointCreatorPrefab;
+    [SerializeField] private GameObject _tileHighlighterPrefab;
+    [SerializeField] private GameObject _tileRegistratorPrefab;
+    [SerializeField] private GameObject _tilesRepositoryPrefab;
+    [SerializeField] private GameObject _playerInitializer;
 
     public static Bootstrapper Instance { get; private set; }
 
-    public TileFactory TileFactory => _tileFactory;
-    public PlayerFactory PlayerFactory => _playerFactory;
-    public EnemyFactory EnemyFactory => _enemyFactory;
-    public SpawnPointCreator SpawnPointCreator => _spawnPointCreator;
-    public TransitionPointCreator TransitionPointCreator => _transitionPointCreator;
-    public CameraFollower CameraFollower => _cameraFollower;
-    public CameraRotator CameraRotator => _cameraRotator;
+    public TileFactory TileFactory { get; private set; }
+    public PlayerFactory PlayerFactory { get; private set; }
+    public EnemyFactory EnemyFactory { get; private set; }
+    public SpawnPointCreator SpawnPointCreator { get; private set; }
+    public TransitionPointCreator TransitionPointCreator { get; private set; }
+    public TileHighlighter TileHighlighter { get; private set; }
+    public TileRegistrator TileRegistrator { get; private set; }
+    public TilesRepository TilesRepository { get; private set; }
+    public PlayerInitializer PlayerInitializer { get; private set; }
+    
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            TileHighlightService.Init(_tileHighlighter);
-        }
-        else
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
+            return;
         }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        // Инстанциируем сервисы и фабрики
+        TileFactory = InstantiatePrefab<TileFactory>(_tileFactoryPrefab, nameof(TileFactory));
+        PlayerFactory = InstantiatePrefab<PlayerFactory>(_playerFactoryPrefab, nameof(PlayerFactory));
+        EnemyFactory = InstantiatePrefab<EnemyFactory>(_enemyFactoryPrefab, nameof(EnemyFactory));
+        SpawnPointCreator = InstantiatePrefab<SpawnPointCreator>(_spawnPointCreatorPrefab, nameof(SpawnPointCreator));
+        TransitionPointCreator = InstantiatePrefab<TransitionPointCreator>(_transitionPointCreatorPrefab, nameof(TransitionPointCreator));
+        TileHighlighter = InstantiatePrefab<TileHighlighter>(_tileHighlighterPrefab, nameof(TileHighlighter));
+        TileRegistrator = InstantiatePrefab<TileRegistrator>(_tileRegistratorPrefab, nameof(TileRegistrator));
+        TilesRepository = InstantiatePrefab<TilesRepository>(_tilesRepositoryPrefab, nameof(TilesRepository));
+        PlayerInitializer = InstantiatePrefab<PlayerInitializer>(_playerInitializer, nameof(PlayerInitializer));
+
+        // Инициализируем подсветку
+        TileHighlightService.Init(TileHighlighter);
+    }
+
+    private void Start()
+    {
+        if (!string.IsNullOrEmpty(_mainScene))
+            SceneManager.LoadScene(_mainScene);
+        else
+            Debug.LogError("Bootstrapper: Main Scene is not specified.");
+    }
+    
+    private T InstantiatePrefab<T>(GameObject prefab, string name) where T : Component
+    {
+        if (prefab == null)
+        {
+            Debug.LogError($"Bootstrapper: Prefab для {typeof(T).Name} не назначен.");
+            return null;
+        }
+        var obj = Instantiate(prefab);
+        obj.name = name;
+        DontDestroyOnLoad(obj);
+
+        var component = obj.GetComponent<T>();
+        if (component == null)
+            Debug.LogError($"Bootstrapper: Префаб {prefab.name} не содержит компонент {typeof(T).Name}.");
+
+        return component;
     }
 }

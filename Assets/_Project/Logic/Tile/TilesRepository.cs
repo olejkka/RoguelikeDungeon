@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-[DefaultExecutionOrder(-200)]
 public class TilesRepository : MonoBehaviour
 {
     private Dictionary<Vector2Int, Tile> _tiles = new();
@@ -11,14 +10,13 @@ public class TilesRepository : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
+            return;
         }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     public void RegisterTile(Tile tile, Vector2Int position)
@@ -35,5 +33,10 @@ public class TilesRepository : MonoBehaviour
     public Dictionary<Vector2Int, Tile> GetTiles()
     {
         return _tiles;
+    }
+
+    public void ClearTiles()
+    {
+        _tiles.Clear();
     }
 }

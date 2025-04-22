@@ -6,6 +6,18 @@ using Random = UnityEngine.Random;
 public class SpawnPointCreator : MonoBehaviour
 {
     public static event Action OnSpawnPointCreated;
+    public static SpawnPointCreator Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
 
     public void CreateSpawnPoint()
     {

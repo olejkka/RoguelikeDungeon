@@ -1,20 +1,20 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-[DefaultExecutionOrder(-100)]
 public class TileRegistrator : MonoBehaviour
 {
+    public static event Action OnTilesRegistered;
     public static TileRegistrator Instance { get; private set; }
     
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
+            return;
         }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
     
     private void OnEnable()
@@ -42,5 +42,7 @@ public class TileRegistrator : MonoBehaviour
 
             TilesRepository.Instance.RegisterTile(tile, tile.Position);
         }
+        
+        OnTilesRegistered?.Invoke();
     }
 }

@@ -4,9 +4,21 @@ using UnityEngine.Serialization;
 
 public class PlayerFactory : MonoBehaviour
 {
+    [SerializeField] private Character characterPrefab;
     public static event Action OnPlayerCreated;
+    public static PlayerFactory Instance { get; private set; }
+
     
-    [FormerlySerializedAs("_playerPrefab")] [SerializeField] private Character characterPrefab;
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
 
     public Character Generate()
     {

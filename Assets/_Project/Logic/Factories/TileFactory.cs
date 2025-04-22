@@ -1,10 +1,24 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 public class TileFactory : MonoBehaviour
 {
     public static event Action OnRoomGenerated;
+    public static TileFactory Instance { get; private set; }
+
+    
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
 
     [FormerlySerializedAs("tilePrefab")]
     [Header("Tile Prefabs")]
@@ -31,46 +45,73 @@ public class TileFactory : MonoBehaviour
         }
     }
 
-    public void GenerateRoom()
+    public Transform GenerateRoom()
     {
         ClearTiles();
 
+        // Генерация логической карты
         var layoutGenerator = new RandomRoomLayoutGenerator(rows, columns, minRoomSize, maxRoomSize, fillProbability);
         TileType[,] layout = layoutGenerator.Generate();
 
-        for (int x = 0; x < layout.GetLength(0); x++)
+        // Создаём контейнер комнаты
+        GameObject roomObj = new GameObject("Room");
+        roomObj.transform.parent = this.transform;
+
+        // Сбор координат пола для вычисления центра
+        List<Vector3> floorPositions = new List<Vector3>();
+        int width = layout.GetLength(0);
+        int depth = layout.GetLength(1);
+        for (int x = 0; x < width; x++)
+            for (int z = 0; z < depth; z++)
+                if (layout[x, z] != TileType.Empty)
+                    floorPositions.Add(new Vector3(x * spacing, 0f, z * spacing));
+
+        if (floorPositions.Count == 0)
         {
-            for (int z = 0; z < layout.GetLength(1); z++)
+            Debug.LogWarning("Нет тайлов для комнаты!");
+            OnRoomGenerated?.Invoke();
+            return roomObj.transform;
+        }
+
+        // Вычисление центра комнаты
+        Vector3 center = Vector3.zero;
+        foreach (var pos in floorPositions) center += pos;
+        center /= floorPositions.Count;
+        roomObj.transform.position = center;
+
+        // Инстанцируем тайлы вокруг центра
+        for (int x = 0; x < width; x++)
+        {
+            for (int z = 0; z < depth; z++)
             {
                 TileType type = layout[x, z];
-
                 if (type == TileType.Empty) continue;
 
                 GameObject prefab = type switch
                 {
                     TileType.Floor => _tilePrefab,
-                    TileType.Wall => _wallTilePrefab,
+                    TileType.Wall  => _wallTilePrefab,
                     _ => null
                 };
-
                 if (prefab == null) continue;
 
-                Vector3 pos = new Vector3(x * spacing, 0f, z * spacing);
-                GameObject tileObj = Instantiate(prefab, pos, Quaternion.identity, transform);
+                Vector3 worldPos = new Vector3(x * spacing, 0f, z * spacing);
+                Vector3 localPos = worldPos - center;
+
+                GameObject tileObj = Instantiate(prefab, roomObj.transform);
+                tileObj.transform.localPosition = localPos;
                 tileObj.name = $"{type}_{x}_{z}";
 
-                Tile tile = tileObj.GetComponent<Tile>();
-                if (tile == null)
+                var tile = tileObj.GetComponent<Tile>();
+                if (tile != null)
                 {
-                    Debug.LogError("Prefab не содержит компонент Tile!");
-                    continue;
+                    tile.Type = type;
+                    tile.Initialize();
                 }
-
-                tile.Type = type;
-                tile.Initialize();
             }
         }
 
         OnRoomGenerated?.Invoke();
+        return roomObj.transform;
     }
 }
