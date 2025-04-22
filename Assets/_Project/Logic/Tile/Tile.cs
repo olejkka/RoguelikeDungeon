@@ -4,21 +4,19 @@ using UnityEngine;
 public class Tile : MonoBehaviour
 {
     [SerializeField] private GameObject _spawnPoint;
-    
+    [SerializeField] private TileType _type;
+
     private Vector2Int _position;
     private bool _isHighlighted;
-    private bool _isWall;
-    private bool _isSpawnPoint;
     private Character _occupiedCharacter;
     private TileHighlightVisuals _visuals;
-    
-    public Vector2Int Position { get { return _position; } set { _position = value; } }
-    public bool IsHighlighted { get { return _isHighlighted; } set { _isHighlighted = value; } }
-    public bool IsWall { get { return _isWall; } set { _isWall = value; } }
-    public bool IsSpawnPoint { get { return _isSpawnPoint; } set { _isSpawnPoint = value; } }
-    public Character OccupiedCharacter { get { return _occupiedCharacter; } set { _occupiedCharacter = value; } }
+
+    public Vector2Int Position { get => _position; set => _position = value; }
+    public bool IsHighlighted { get => _isHighlighted; set => _isHighlighted = value; }
+    public Character OccupiedCharacter { get => _occupiedCharacter; set => _occupiedCharacter = value; }
     public TileHighlightVisuals Visuals => _visuals;
-    
+    public TileType Type { get => _type; set => _type = value; }
+
     private void Awake()
     {
         _visuals = GetComponentInChildren<TileHighlightVisuals>();
@@ -26,7 +24,7 @@ public class Tile : MonoBehaviour
         _visuals.highlightEnemyTile?.SetActive(false);
         _visuals.hoverHighlightTile?.SetActive(false);
     }
-    
+
     public void Initialize()
     {
         Position = new Vector2Int(
@@ -34,13 +32,13 @@ public class Tile : MonoBehaviour
             Mathf.RoundToInt(transform.position.z)
         );
     }
-    
+
     public bool TryGetSpawnPoint(out Transform point)
     {
         point = _spawnPoint != null ? _spawnPoint.transform : null;
         return point != null;
     }
-    
+
     public List<Tile> GetNeighbors(NeighborTilesSelectionSO settings)
     {
         if (settings == null) return new List<Tile>();
@@ -57,7 +55,7 @@ public class Tile : MonoBehaviour
 
         return result;
     }
-    
+
     public void SetHighlighted(bool state)
     {
         IsHighlighted = state;

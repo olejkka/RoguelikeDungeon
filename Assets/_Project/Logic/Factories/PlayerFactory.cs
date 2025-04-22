@@ -29,7 +29,7 @@ public class PlayerFactory : MonoBehaviour
 
         foreach (Tile tile in tiles)
         {
-            if (tile.IsSpawnPoint && tile.TryGetSpawnPoint(out Transform spawnPoint))
+            if (tile.Type == TileType.Spawn && tile.TryGetSpawnPoint(out Transform spawnPoint))
             {
                 return spawnPoint;
             }

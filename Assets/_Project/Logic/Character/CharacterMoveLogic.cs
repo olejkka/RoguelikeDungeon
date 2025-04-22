@@ -5,6 +5,7 @@ using UnityEngine;
 public class CharacterMoveLogic : MonoBehaviour
 {
     private Character character;
+    private bool needsHighlight = true;
 
 
     private void OnEnable()
@@ -36,7 +37,7 @@ public class CharacterMoveLogic : MonoBehaviour
             return;
         }
 
-        List<Tile> moves = FigureMoveService.GetAvailableToMoveTiles(character);
+        List<Tile> moves = CharacterMoveService.GetAvailableToMoveTiles(character);
         
 
         TileHighlightService.HighlightTiles(character, moves);

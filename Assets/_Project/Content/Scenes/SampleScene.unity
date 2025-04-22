@@ -749,6 +749,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 917855266}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1050353478
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1050353479}
+  - component: {fileID: 1050353480}
+  m_Layer: 0
+  m_Name: EnemyFactory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1050353479
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1050353478}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1564183910}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1050353480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1050353478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4907580271348019a66a4ad4f6bd3aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemyPrefab: {fileID: 2528740651555039304, guid: 1026cf80732acd541960ffbb822648b0, type: 3}
+  _enemyCount: 3
 --- !u!1 &1057342153
 GameObject:
   m_ObjectHideFlags: 0
@@ -780,9 +826,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _tilePrefab: {fileID: 2708488578446068642, guid: 08b5cac8cd80c7240a1dade524c8aabe, type: 3}
   _wallTilePrefab: {fileID: 2708488578446068642, guid: 6d9a68730d171c14c9e31f386a265cba, type: 3}
-  columns: 20
-  rows: 20
+  columns: 100
+  rows: 100
   spacing: 1
+  minRoomSize: 50
+  maxRoomSize: 100
+  fillProbability: 0.5
 --- !u!4 &1057342155
 Transform:
   m_ObjectHideFlags: 0
@@ -808,7 +857,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1564183910}
   m_Layer: 0
-  m_Name: Player
+  m_Name: Characters
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -829,6 +878,7 @@ Transform:
   m_Children:
   - {fileID: 1815872733}
   - {fileID: 737756047}
+  - {fileID: 1050353479}
   m_Father: {fileID: 917855266}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1576817740

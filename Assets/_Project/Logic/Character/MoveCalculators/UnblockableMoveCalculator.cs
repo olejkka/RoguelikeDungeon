@@ -10,7 +10,7 @@ public class UnblockableMoveCalculator : MoveCalculator
         foreach (var tile in possibleMoves)
         {
             if (tile == null) continue;
-            if (tile.IsWall) continue;
+            if (tile.Type == TileType.Wall) continue;
 
             var target = tile.OccupiedCharacter;
             if (target == null || CharacterIdentifier.IsEnemy(currentTile.OccupiedCharacter, target))

@@ -9,6 +9,8 @@ public class Movement : MonoBehaviour
     [SerializeField] private float _durationOfJump = 1f;
     [SerializeField] private float _durationOfRotate = 0.2f;
     
+    private TileHighlighter _highlighter;
+    
     public bool IsMoving { get; set; }
     
     private void Awake()
@@ -21,7 +23,7 @@ public class Movement : MonoBehaviour
         if (targetTile == _character.CurrentTile)
             return;
         
-        if (targetTile.IsWall)
+        if (targetTile.Type == TileType.Wall)
             return;
         
         if(targetTile.IsHighlighted == false)

@@ -2,6 +2,6 @@
 {
     public static MoveCalculator Create(NeighborTilesSelectionSO settings)
     {
-        return new UnblockableMoveCalculator();
+        return new DefaultMoveCalculator();
     }
 }

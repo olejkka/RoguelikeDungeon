@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine;
 
-public static class FigureMoveService
+public static class CharacterMoveService
 {
     public static List<Tile> GetAvailableToMoveTiles(Character character)
     {
@@ -17,7 +17,7 @@ public static class FigureMoveService
         );
 
         return rawMoves
-            .Where(tile => !tile.IsWall)
+            .Where(tile => tile.Type != TileType.Wall)
             .Where(tile =>
                 tile.OccupiedCharacter == null ||
                 CharacterIdentifier.IsEnemy(character, tile.OccupiedCharacter))

@@ -12,9 +12,16 @@ public class TileFactory : MonoBehaviour
     [SerializeField] private GameObject _wallTilePrefab;
 
     [Header("Board Settings")]
-    [SerializeField] private int columns = 10;
-    [SerializeField] private int rows = 10;
+    [SerializeField] private int columns = 100;
+    [SerializeField] private int rows = 100;
     [SerializeField] private float spacing = 1f;
+
+    [Header("Room Size Settings")]
+    [SerializeField] private int minRoomSize = 50;
+    [SerializeField] private int maxRoomSize = 100;
+
+    [Header("Room Shape Settings")]
+    [SerializeField, Range(0f, 1f)] private float fillProbability = 0.7f;
 
     public void ClearTiles()
     {
@@ -26,19 +33,31 @@ public class TileFactory : MonoBehaviour
 
     public void GenerateBoard()
     {
-        int totalColumns = columns + 2;
-        int totalRows = rows + 2;
+        ClearTiles();
 
-        for (int x = 0; x < totalColumns; x++)
+        var layoutGenerator = new RandomRoomLayoutGenerator(rows, columns, minRoomSize, maxRoomSize, fillProbability);
+        TileType[,] layout = layoutGenerator.Generate();
+
+        for (int x = 0; x < layout.GetLength(0); x++)
         {
-            for (int z = 0; z < totalRows; z++)
+            for (int z = 0; z < layout.GetLength(1); z++)
             {
-                bool isWall = x == 0 || x == totalColumns - 1 || z == 0 || z == totalRows - 1;
-                GameObject prefabToUse = isWall ? _wallTilePrefab : _tilePrefab;
+                TileType type = layout[x, z];
+
+                if (type == TileType.Empty) continue;
+
+                GameObject prefab = type switch
+                {
+                    TileType.Floor => _tilePrefab,
+                    TileType.Wall => _wallTilePrefab,
+                    _ => null
+                };
+
+                if (prefab == null) continue;
 
                 Vector3 pos = new Vector3(x * spacing, 0f, z * spacing);
-                GameObject tileObj = Instantiate(prefabToUse, pos, Quaternion.identity, transform);
-                tileObj.name = isWall ? $"Wall_{x}_{z}" : $"Tile_{x}_{z}";
+                GameObject tileObj = Instantiate(prefab, pos, Quaternion.identity, transform);
+                tileObj.name = $"{type}_{x}_{z}";
 
                 Tile tile = tileObj.GetComponent<Tile>();
                 if (tile == null)
@@ -47,7 +66,7 @@ public class TileFactory : MonoBehaviour
                     continue;
                 }
 
-                tile.IsWall = isWall;
+                tile.Type = type;
                 tile.Initialize();
             }
         }

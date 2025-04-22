@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 public class DefaultMoveCalculator : MoveCalculator
 {
@@ -7,7 +8,6 @@ public class DefaultMoveCalculator : MoveCalculator
     {
         List<Tile> moves = new List<Tile>();
         List<Tile> possibleMoves = currentTile.GetNeighbors(settings);
-
         Dictionary<Vector2Int, List<Tile>> directionalMoves = new Dictionary<Vector2Int, List<Tile>>();
 
         foreach (var offset in settings.GetOffsets())
@@ -28,24 +28,24 @@ public class DefaultMoveCalculator : MoveCalculator
 
         foreach (var entry in directionalMoves)
         {
-            bool foundObstacle = false;
-            foreach (var tile in entry.Value)
+            List<Tile> sortedTiles = entry.Value
+                .OrderBy(t => Vector2Int.Distance(currentTile.Position, t.Position))
+                .ToList();
+
+            foreach (var tile in sortedTiles)
             {
-                if (foundObstacle) break;
-                if (tile.IsWall)
-                {
-                    foundObstacle = true;
+                if (tile.Type == TileType.Wall)
                     break;
-                }
+
                 if (tile.OccupiedCharacter != null)
                 {
-                    moves.Add(tile);
-                    foundObstacle = true; 
+                    if (CharacterIdentifier.IsEnemy(currentTile.OccupiedCharacter, tile.OccupiedCharacter))
+                        moves.Add(tile); // врага можно атаковать
+
+                    break; // и враг, и союзник блокируют путь
                 }
-                else
-                {
-                    moves.Add(tile);
-                }
+
+                moves.Add(tile); // свободная клетка
             }
         }
 

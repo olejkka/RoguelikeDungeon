@@ -10,7 +10,7 @@ public class SpawnPointCreator : MonoBehaviour
     public void CreateSpawnPoint()
     {
         Tile[] availableTiles = FindObjectsOfType<Tile>()
-            .Where(tile => tile.IsWall == false)
+            .Where(tile => tile.Type != TileType.Wall)
             .ToArray();
 
         if (availableTiles.Length == 0)
@@ -20,7 +20,7 @@ public class SpawnPointCreator : MonoBehaviour
         }
 
         Tile selectedTile = availableTiles[Random.Range(0, availableTiles.Length)];
-        selectedTile.IsSpawnPoint = true;
+        selectedTile.Type = TileType.Spawn;
         
         OnSpawnPointCreated?.Invoke();
     }

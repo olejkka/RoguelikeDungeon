@@ -56,6 +56,7 @@ public class Bootstrapper : MonoBehaviour
     void GeneratePlayer()
     {
         Player player = _playerFactory.Generate() as Player;
+        
         if (player != null)
         {
             _cameraFollower.SetTarget(player.transform);
