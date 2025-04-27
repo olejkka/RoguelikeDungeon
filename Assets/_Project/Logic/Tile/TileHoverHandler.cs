@@ -17,6 +17,8 @@ public class TileHoverHandler : MonoBehaviour
         if (parentTile != null && parentTile.IsHighlighted && visuals != null)
         {
             wasEnemyHighlighted = visuals.highlightEnemyTile != null && visuals.highlightEnemyTile.activeSelf;
+            visuals.highlightEmptyTile?.SetActive(false);
+            visuals.highlightEnemyTile?.SetActive(false);
             visuals.hoverHighlightTile?.SetActive(true);
         }
     }

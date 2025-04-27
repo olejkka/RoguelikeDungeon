@@ -21,13 +21,14 @@ public class EnemyFactory : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void SpawnEnemies()
+    public List<Enemy> SpawnEnemies()
     {
+        var enemies = new List<Enemy>();
         Tile spawnTile = FindSpawnTile();
         if (spawnTile == null)
         {
             Debug.LogWarning("Не найдена точка спавна игрока.");
-            return;
+            return enemies;
         }
 
         List<Tile> availableTiles = FindObjectsOfType<Tile>()
@@ -44,17 +45,21 @@ public class EnemyFactory : MonoBehaviour
             availableTiles.RemoveAt(index);
 
             GameObject enemyObj = Instantiate(_enemyPrefab, tile.transform.position, Quaternion.identity);
-            Enemy enemy = enemyObj.GetComponent<Enemy>();
-            if (enemy == null)
+            if (enemyObj.TryGetComponent<Enemy>(out var enemy))
+            {
+                tile.OccupiedCharacter = enemy;
+                enemy.CurrentTile = tile;
+                enemies.Add(enemy);
+            }
+            else
             {
                 Debug.LogError("Префаб врага не содержит компонент Enemy!");
-                continue;
             }
-
-            tile.OccupiedCharacter = enemy;
-            enemy.CurrentTile = tile;
         }
+
+        return enemies;
     }
+
 
     private Tile FindSpawnTile()
     {

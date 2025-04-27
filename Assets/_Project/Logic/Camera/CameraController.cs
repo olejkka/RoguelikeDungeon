@@ -1,10 +1,6 @@
 ﻿using UnityEngine;
 
-/// <summary>
-/// Универсальный контроллер камеры: следует за целью на фиксированной высоте и угле наклона,
-/// вращается вокруг цели при зажатой ПКМ, без изменения расстояния.
-/// Цель задаётся динамически через SetTarget().
-/// </summary>
+
 [RequireComponent(typeof(Camera))]
 public class CameraController : MonoBehaviour
 {
@@ -40,10 +36,7 @@ public class CameraController : MonoBehaviour
         if (_target == null) return;
         UpdateCamera();
     }
-
-    /// <summary>
-    /// Устанавливает новую цель для слежения. Вызывается из LevelLoader после создания игрока.
-    /// </summary>
+    
     public void SetTarget(Transform target)
     {
         _target = target;
@@ -54,9 +47,6 @@ public class CameraController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Рассчитывает начальный угол вращения на основе текущего положения камеры.
-    /// </summary>
     private void InitializeYaw()
     {
         Vector3 dir = transform.position - (_target.position + Vector3.up * _height);
@@ -67,9 +57,6 @@ public class CameraController : MonoBehaviour
             _yawAngle = 0f;
     }
 
-    /// <summary>
-    /// Обновляет позицию и ротацию камеры на основе target, yaw, pitch, distance, height.
-    /// </summary>
     private void UpdateCamera()
     {
         Quaternion yawRot = Quaternion.Euler(0f, _yawAngle, 0f);

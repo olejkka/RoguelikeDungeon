@@ -158,6 +158,7 @@ MonoBehaviour:
   _tileRegistratorPrefab: {fileID: 1088303884348895562, guid: f81114b21b1e0604b9e478855b8ecbfc, type: 3}
   _tilesRepositoryPrefab: {fileID: 4784710290567387222, guid: 1880eb7f4e08e8845afb8612ac0e7184, type: 3}
   _playerInitializer: {fileID: 5170241848560575193, guid: 0c91316acba19c5469a36d02770e5252, type: 3}
+  _gameStateMachine: {fileID: 6051366475448205148, guid: d48f39b162beec542b1c8889fc05acf0, type: 3}
 --- !u!4 &198625777
 Transform:
   m_ObjectHideFlags: 0

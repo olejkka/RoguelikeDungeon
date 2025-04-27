@@ -22,7 +22,7 @@ public class SpawnPointCreator : MonoBehaviour
     public void CreateSpawnPoint()
     {
         Tile[] availableTiles = FindObjectsOfType<Tile>()
-            .Where(tile => tile.Type != TileType.Wall)
+            .Where(tile => tile.Type != TileType.Empty || tile.Type != TileType.Wall || tile.Type != TileType.Transition)
             .ToArray();
 
         if (availableTiles.Length == 0)

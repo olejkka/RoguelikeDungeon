@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -16,14 +17,13 @@ public class LevelLoader : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     private void OnEnable()
     {
         TileRegistrator.OnTilesRegistered += HandleTilesRegistered;
         SpawnPointCreator.OnSpawnPointCreated += HandleSpawnPointCreated;
-        Movement.OnSteppingOnATransitionTile += ReloadCurrentScene;
+        PlayerTurnState.OnSteppingOnATransitionTile += ReloadCurrentScene;
     }
 
     private void Start()
@@ -35,7 +35,7 @@ public class LevelLoader : MonoBehaviour
     {
         TileRegistrator.OnTilesRegistered -= HandleTilesRegistered;
         SpawnPointCreator.OnSpawnPointCreated -= HandleSpawnPointCreated;
-        Movement.OnSteppingOnATransitionTile -= ReloadCurrentScene;
+        PlayerTurnState.OnSteppingOnATransitionTile -= ReloadCurrentScene;
     }
     
     
@@ -44,11 +44,9 @@ public class LevelLoader : MonoBehaviour
         ClearEntities();
         TilesRepository.Instance.ClearTiles();
         TileFactory.Instance.ClearTiles();
-
-        // Генерируем комнату и получаем её transform
+        
         Transform roomTransform = TileFactory.Instance.GenerateRoom();
-
-        // Устанавливаем камеру следить за комнатой
+        
         if (_cameraController != null && roomTransform != null)
             _cameraController.SetTarget(roomTransform);
     }
@@ -62,10 +60,13 @@ public class LevelLoader : MonoBehaviour
     private void HandleSpawnPointCreated()
     {
         var player = PlayerFactory.Instance.Generate() as Player;
+        var moveLogic = FindObjectOfType<HighlighterAwalibleMoves>();
         
-        _cameraController.SetTarget(player.transform);
+        List<Enemy> enemies = EnemyFactory.Instance.SpawnEnemies();
 
-        EnemyFactory.Instance.SpawnEnemies();
+        // Инициализируем машину состояний стартовым состоянием хода игрока
+        var playerState = new PlayerTurnState(GameStateMachine.Instance, player, moveLogic, enemies);
+        GameStateMachine.Instance.Initialize(playerState);
     }
 
    

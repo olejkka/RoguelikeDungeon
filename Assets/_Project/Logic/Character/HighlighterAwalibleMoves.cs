@@ -1,0 +1,41 @@
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class HighlighterAwalibleMoves : MonoBehaviour
+{
+    private Character character;
+
+
+    private void OnEnable()
+    {
+        PlayerFactory.OnPlayerCreated += OnPlayerCreatedHandler;
+    }
+
+    private void OnDisable()
+    {
+        PlayerFactory.OnPlayerCreated -= OnPlayerCreatedHandler;
+    }
+
+    void OnPlayerCreatedHandler()
+    {
+        character = FindObjectOfType<Player>();
+    }
+    
+    public void HighlightAvailableToMoveTiles()
+    {
+        if (character == null)
+            return;
+        
+        if (character.CurrentTile == null)
+        {
+            Debug.LogWarning($"[FigureLogic] Character {character.gameObject.name} не может найти текущую клетку!");
+            return;
+        }
+
+        List<Tile> moves = CharacterMoveService.GetAvailableToMoveTiles(character);
+        
+
+        TileHighlightService.HighlightTiles(character, moves);
+    }
+}

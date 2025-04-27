@@ -16,6 +16,7 @@ public class Bootstrapper : MonoBehaviour
     [SerializeField] private GameObject _tileRegistratorPrefab;
     [SerializeField] private GameObject _tilesRepositoryPrefab;
     [SerializeField] private GameObject _playerInitializer;
+    [SerializeField] private GameObject _gameStateMachine;
 
     public static Bootstrapper Instance { get; private set; }
 
@@ -27,7 +28,8 @@ public class Bootstrapper : MonoBehaviour
     public TileHighlighter TileHighlighter { get; private set; }
     public TileRegistrator TileRegistrator { get; private set; }
     public TilesRepository TilesRepository { get; private set; }
-    public PlayerInitializer PlayerInitializer { get; private set; }
+    public CharacterInitializer CharacterInitializer { get; private set; }
+    public GameStateMachine GameStateMachine { get; private set; }
     
 
     private void Awake()
@@ -49,7 +51,8 @@ public class Bootstrapper : MonoBehaviour
         TileHighlighter = InstantiatePrefab<TileHighlighter>(_tileHighlighterPrefab, nameof(TileHighlighter));
         TileRegistrator = InstantiatePrefab<TileRegistrator>(_tileRegistratorPrefab, nameof(TileRegistrator));
         TilesRepository = InstantiatePrefab<TilesRepository>(_tilesRepositoryPrefab, nameof(TilesRepository));
-        PlayerInitializer = InstantiatePrefab<PlayerInitializer>(_playerInitializer, nameof(PlayerInitializer));
+        CharacterInitializer = InstantiatePrefab<CharacterInitializer>(_playerInitializer, nameof(CharacterInitializer));
+        GameStateMachine = InstantiatePrefab<GameStateMachine>(_gameStateMachine, nameof(GameStateMachine));
 
         // Инициализируем подсветку
         TileHighlightService.Init(TileHighlighter);

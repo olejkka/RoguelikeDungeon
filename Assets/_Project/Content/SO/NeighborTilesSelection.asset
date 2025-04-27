@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: NeighborTilesSelection
   m_EditorClassIdentifier: 
   neighborRules:
-  - rectangleWidth: 20
-    rectangleHeight: 20
+  - rectangleWidth: 2
+    rectangleHeight: 2

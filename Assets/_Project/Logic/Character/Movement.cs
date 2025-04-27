@@ -2,6 +2,7 @@
 using DG.Tweening;
 using UnityEngine;
 
+[RequireComponent(typeof(Character))]
 public class Movement : MonoBehaviour
 {
     
@@ -10,9 +11,7 @@ public class Movement : MonoBehaviour
     [SerializeField] private float _durationOfJump = 1f;
     [SerializeField] private float _durationOfRotate = 0.2f;
     private Character _character;
-    private TileHighlighter _highlighter;
-    public static event Action OnSteppingOnATransitionTile;
-    
+    public event Action OnMoveFinished;
     public bool IsMoving { get; set; }
     
     private void Awake()
@@ -31,8 +30,18 @@ public class Movement : MonoBehaviour
         if(targetTile.IsHighlighted == false)
             return;
         
+        const int attackDamage = 10;
+        if (AttackService.TryMeleeAttack(_character, targetTile, attackDamage))
+        {
+            TileHighlighter.Instance.ClearHighlights();
+            OnMoveFinished?.Invoke();
+            return;
+        }
+        
         if (IsMoving == false)
         {
+            TileHighlighter.Instance.ClearHighlights();
+            
             IsMoving = true;
             
             Vector3 direction = (targetTile.transform.position - _character.transform.position).normalized;
@@ -52,11 +61,9 @@ public class Movement : MonoBehaviour
                     .OnComplete(() =>
                     {
                         _character.CurrentTile = targetTile;
-                        
-                        if (targetTile.Type == TileType.Transition)
-                            OnSteppingOnATransitionTile?.Invoke();
-                        
+                            
                         IsMoving = false;
+                        OnMoveFinished?.Invoke();
                     });
             });
         }

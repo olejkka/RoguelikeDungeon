@@ -5,7 +5,7 @@ public class ClickHandler : MonoBehaviour
 {
     public static event Action<Tile> TileClicked;
     
-    private void OnMouseDown()
+    void OnMouseDown()
     {
         Tile tile = GetComponentInParent<Tile>();
         if (tile != null)
