@@ -1,29 +1,37 @@
 ﻿using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class EnemyTurnState : IGameState
 {
+    private const float InitialDelaySeconds = 0.5f;
+    
     private readonly GameStateMachine _stateMachine;
     private readonly List<Enemy> _enemies;
+    private readonly IEnemyMoveSelector _moveSelector;
     private int _currentEnemyIndex = 0;
+    
 
-    public EnemyTurnState(GameStateMachine stateMachine, List<Enemy> enemies)
+    public EnemyTurnState
+    (
+        GameStateMachine stateMachine, 
+        List<Enemy> enemies
+        )
     {
         _stateMachine = stateMachine;
         _enemies = enemies;
+        _moveSelector = new ScoringMoveSelector();
     }
 
     public void Enter()
     {
-        StartNextEnemyMove();
+        DOVirtual.DelayedCall(InitialDelaySeconds, StartNextEnemyMove);
     }
 
     public void Tick() { }
 
     private void StartNextEnemyMove()
     {
-        TileHighlighter.Instance.ClearHighlights();
-
         if (_currentEnemyIndex >= _enemies.Count)
         {
             var player = GameObject.FindObjectOfType<Player>();
@@ -39,20 +47,28 @@ public class EnemyTurnState : IGameState
         
         TileHighlightService.HighlightTiles(enemy, availableTiles);
 
-        if (availableTiles.Count == 0)
+        if (availableTiles == null || availableTiles.Count == 0)
         {
             FinishEnemyMove();
             return;
         }
-        
-        Tile chosenTile = availableTiles[Random.Range(0, availableTiles.Count)];
-        
-        // Debug.Log($"chosenTile - {chosenTile.Position}");
-        
-        Movement movement = enemy.GetComponent<Movement>();
+
+        // Выбираем тайл через ScoringMoveSelector
+        Tile chosenTile = _moveSelector.SelectTile(enemy, availableTiles);
+        Debug.Log($"{enemy.name} chose {chosenTile.Position}");
+        if (chosenTile == null)
+        {
+            FinishEnemyMove();
+            return;
+        }
+
+        // Подписываемся на окончание анимации движения
+        var movement = enemy.GetComponent<Movement>();
         movement.OnMoveFinished += HandleMoveFinished;
-        
+
+        // Запускаем движение (или атаку через AttackService внутри Movement.Move)
         enemy.Move(chosenTile);
+        Debug.Log($"{enemy.name} moved to {chosenTile.Position}");
     }
 
     private void HandleMoveFinished()

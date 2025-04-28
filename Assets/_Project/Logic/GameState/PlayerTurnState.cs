@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class PlayerTurnState : IGameState
 {
+    private const float InitialDelaySeconds = 0.5f;
+    
     private Player _player;
     private readonly GameStateMachine _stateMachine;
     private readonly Movement _movement;
@@ -11,11 +14,14 @@ public class PlayerTurnState : IGameState
     private readonly List<Enemy> _enemies;
     public static event Action OnSteppingOnATransitionTile;
 
-    public PlayerTurnState(
+    
+    public PlayerTurnState
+    (
         GameStateMachine stateMachine,
         Player player,
         HighlighterAwalibleMoves moveLogic,
-        List<Enemy> enemies)
+        List<Enemy> enemies
+        )
     {
         _stateMachine = stateMachine;
         _player = player;
@@ -26,14 +32,17 @@ public class PlayerTurnState : IGameState
 
     public void Enter()
     {
-        _movement.OnMoveFinished += HandleMoveFinished;
-        
-        _moveLogic.HighlightAvailableToMoveTiles();
+        DOVirtual.DelayedCall(InitialDelaySeconds, ShowMoves);
     }
 
     public void Tick()
     {
-        
+    }
+    
+    private void ShowMoves()
+    {
+        _movement.OnMoveFinished += HandleMoveFinished;
+        _moveLogic.HighlightAvailableToMoveTiles();
     }
 
     private void HandleMoveFinished()

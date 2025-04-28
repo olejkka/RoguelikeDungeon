@@ -31,7 +31,7 @@ public class Movement : MonoBehaviour
             return;
         
         const int attackDamage = 10;
-        if (AttackService.TryMeleeAttack(_character, targetTile, attackDamage))
+        if (Attack.TryMeleeAttack(_character, targetTile, attackDamage))
         {
             TileHighlighter.Instance.ClearHighlights();
             OnMoveFinished?.Invoke();
@@ -40,13 +40,13 @@ public class Movement : MonoBehaviour
         
         if (IsMoving == false)
         {
-            TileHighlighter.Instance.ClearHighlights();
-            
-            IsMoving = true;
-            
             Vector3 direction = (targetTile.transform.position - _character.transform.position).normalized;
             Vector3 lookAtTarget = _character.transform.position + direction;
-
+            
+            TileHighlighter.Instance.ClearHighlights();
+            IsMoving = true;
+            _character.CurrentTile = targetTile;
+            
             _character.transform.DOKill(true);
             _character.transform.DOLookAt(lookAtTarget, _durationOfRotate, AxisConstraint.Y).OnComplete(() =>
             {
@@ -60,8 +60,6 @@ public class Movement : MonoBehaviour
                     .SetEase(Ease.Linear)
                     .OnComplete(() =>
                     {
-                        _character.CurrentTile = targetTile;
-                            
                         IsMoving = false;
                         OnMoveFinished?.Invoke();
                     });
