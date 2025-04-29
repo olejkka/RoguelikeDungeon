@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class EnemyTurnState : IGameState
 {
-    private const float InitialDelaySeconds = 0.5f;
+    private float _initialDelaySeconds = 0.5f;
     
     private readonly GameStateMachine _stateMachine;
     private readonly List<Enemy> _enemies;
     private readonly IEnemyMoveSelector _moveSelector;
-    private int _currentEnemyIndex = 0;
+    private int _currentEnemyIndex;
     
 
     public EnemyTurnState
@@ -27,14 +27,13 @@ public class EnemyTurnState : IGameState
     public void Enter()
     {
         TileHighlighter.Instance.ClearHighlights();
-        DOVirtual.DelayedCall(InitialDelaySeconds, StartNextEnemyMove);
+        DOVirtual.DelayedCall(_initialDelaySeconds, StartNextEnemyMove);
     }
 
     public void Tick() { }
 
     private void StartNextEnemyMove()
     {
-        // Если все враги сходили — передаём ход игроку
         if (_currentEnemyIndex >= _enemies.Count)
         {
             var player     = GameObject.FindObjectOfType<Player>();
@@ -48,8 +47,7 @@ public class EnemyTurnState : IGameState
 
         var enemy = _enemies[_currentEnemyIndex];
         var moves = AvailableMovesCalculator.GetAvailableTiles(enemy);
-
-        // Подсветка доступных для врага тайлов
+        
         var enemyTiles = moves
             .Where(t => t.OccupiedCharacter != null && CharacterIdentifier.IsEnemy(enemy, t.OccupiedCharacter))
             .ToList();
@@ -58,15 +56,13 @@ public class EnemyTurnState : IGameState
         TileHighlighter.Instance.ClearHighlights();
         TileHighlighter.Instance.HighlightEmptyTiles(emptyTiles);
         TileHighlighter.Instance.HighlightEnemyTiles(enemyTiles);
-
-        // Если враг не может никуда сдвинуться — сразу переходим к следующему
+        
         if (moves.Count == 0)
         {
             FinishEnemyMove();
             return;
         }
-
-        // Выбираем и выполняем ход
+        
         var chosenTile = _moveSelector.SelectTile(enemy, moves);
         if (chosenTile == null)
         {

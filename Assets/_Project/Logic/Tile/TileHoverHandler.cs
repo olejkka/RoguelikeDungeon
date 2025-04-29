@@ -2,24 +2,24 @@
 
 public class TileHoverHandler : MonoBehaviour
 {
-    private Tile parentTile;
-    private TileHighlightVisuals visuals;
-    private bool wasEnemyHighlighted;
+    private Tile _parentTile;
+    private TileHighlightVisuals _visuals;
+    private bool _wasEnemyHighlighted;
 
     private void Start()
     {
-        parentTile = GetComponentInParent<Tile>();
-        visuals = GetComponentInParent<TileHighlightVisuals>();
+        _parentTile = GetComponentInParent<Tile>();
+        _visuals = GetComponentInParent<TileHighlightVisuals>();
     }
 
     private void OnMouseEnter()
     {
-        if (parentTile != null && parentTile.IsHighlighted && visuals != null)
+        if (_parentTile != null && _parentTile.IsHighlighted && _visuals != null)
         {
-            wasEnemyHighlighted = visuals.highlightEnemyTile != null && visuals.highlightEnemyTile.activeSelf;
-            visuals.highlightEmptyTile?.SetActive(false);
-            visuals.highlightEnemyTile?.SetActive(false);
-            visuals.hoverHighlightTile?.SetActive(true);
+            _wasEnemyHighlighted = _visuals.highlightEnemyTile != null && _visuals.highlightEnemyTile.activeSelf;
+            _visuals.highlightEmptyTile?.SetActive(false);
+            _visuals.highlightEnemyTile?.SetActive(false);
+            _visuals.hoverHighlightTile?.SetActive(true);
         }
     }
 
@@ -30,16 +30,16 @@ public class TileHoverHandler : MonoBehaviour
 
     public void ResetHoverEffect()
     {
-        if (visuals == null) return;
+        if (_visuals == null) return;
 
-        visuals.hoverHighlightTile?.SetActive(false);
+        _visuals.hoverHighlightTile?.SetActive(false);
 
-        if (parentTile != null && parentTile.IsHighlighted)
+        if (_parentTile != null && _parentTile.IsHighlighted)
         {
-            if (wasEnemyHighlighted)
-                visuals.highlightEnemyTile?.SetActive(true);
+            if (_wasEnemyHighlighted)
+                _visuals.highlightEnemyTile?.SetActive(true);
             else
-                visuals.highlightEmptyTile?.SetActive(true);
+                _visuals.highlightEmptyTile?.SetActive(true);
         }
     }
 }

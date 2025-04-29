@@ -1,11 +1,12 @@
 ﻿using System;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [RequireComponent(typeof(Character))]
 public class CharacterMover : MonoBehaviour
 {
-    [SerializeField] private int attackDamage = 10;
+    [SerializeField] private int _attackDamage = 10;
     
     [SerializeField] private float _jumpPower = 5f;
     [SerializeField] private int _numJumps = 2;
@@ -33,7 +34,7 @@ public class CharacterMover : MonoBehaviour
             return;
         
         
-        if (Attack.TryMeleeAttack(_character, targetTile, attackDamage))
+        if (Attack.TryMeleeAttack(_character, targetTile, _attackDamage))
         {
             OnMoveFinished?.Invoke();
             return;

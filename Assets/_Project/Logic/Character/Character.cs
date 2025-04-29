@@ -4,7 +4,7 @@ using UnityEngine.Serialization;
 public class Character : MonoBehaviour
 {
     [SerializeField] private Health _health;
-    [FormerlySerializedAs("_movement")] [SerializeField] private CharacterMover characterMover;
+    [SerializeField] private CharacterMover characterMover;
     [SerializeField] private NeighborTilesSelectionSO _neighborTilesSelectionSO;
     private Tile _currentTile;
     
@@ -20,7 +20,12 @@ public class Character : MonoBehaviour
                 _currentTile.OccupiedCharacter = this;
         }
     }
-    public NeighborTilesSelectionSO NeighborTilesSelectionSO { get => _neighborTilesSelectionSO; set => _neighborTilesSelectionSO = value; }
+
+    public NeighborTilesSelectionSO NeighborTilesSelectionSO
+    {
+        get => _neighborTilesSelectionSO; 
+        set => _neighborTilesSelectionSO = value;
+    }
     
 
     public void Move(Tile targetTile)

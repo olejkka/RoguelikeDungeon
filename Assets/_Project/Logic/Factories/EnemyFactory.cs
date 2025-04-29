@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 
 public class EnemyFactory : MonoBehaviour
 {
-    [SerializeField] private GameObject _enemyPrefab;
+    [SerializeField] private Enemy _enemyPrefab;
     [SerializeField] private int _enemyCount = 1;
     public static EnemyFactory Instance { get; private set; }
 
@@ -27,39 +27,38 @@ public class EnemyFactory : MonoBehaviour
         Tile spawnTile = FindSpawnTile();
         if (spawnTile == null)
         {
-            Debug.LogWarning("Не найдена точка спавна игрока.");
+            Debug.LogWarning("Spawn tile not found.");
             return enemies;
         }
 
-        List<Tile> availableTiles = FindObjectsOfType<Tile>()
-            .Where(tile =>
-                tile.Type == TileType.Floor &&
-                tile != spawnTile &&
-                tile.OccupiedCharacter == null)
+        var availableTiles = FindObjectsOfType<Tile>()
+            .Where(t => t.Type == TileType.Floor && t != spawnTile && t.OccupiedCharacter == null)
             .ToList();
 
         for (int i = 0; i < _enemyCount && availableTiles.Count > 0; i++)
         {
-            int index = Random.Range(0, availableTiles.Count);
-            Tile tile = availableTiles[index];
-            availableTiles.RemoveAt(index);
+            int idx = Random.Range(0, availableTiles.Count);
+            Tile tile = availableTiles[idx];
+            availableTiles.RemoveAt(idx);
 
-            GameObject enemyObj = Instantiate(_enemyPrefab, tile.transform.position, Quaternion.identity);
-            if (enemyObj.TryGetComponent<Enemy>(out var enemy))
+            var enemy = Instantiate(_enemyPrefab, tile.transform.position, Quaternion.identity);
+            
+            var initializer = enemy.GetComponent<CharacterInitializer>();
+            if (initializer != null)
             {
-                tile.OccupiedCharacter = enemy;
-                enemy.CurrentTile = tile;
-                enemies.Add(enemy);
+                initializer.InitializeAtCurrentPosition();
             }
             else
             {
-                Debug.LogError("Префаб врага не содержит компонент Enemy!");
+                tile.OccupiedCharacter = enemy;
+                enemy.CurrentTile = tile;
             }
+
+            enemies.Add(enemy);
         }
 
         return enemies;
     }
-
 
     private Tile FindSpawnTile()
     {

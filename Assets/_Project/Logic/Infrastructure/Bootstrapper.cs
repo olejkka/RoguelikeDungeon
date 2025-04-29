@@ -41,8 +41,7 @@ public class Bootstrapper : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
-
-        // Инстанциируем сервисы и фабрики
+        
         TileFactory = InstantiatePrefab<TileFactory>(_tileFactoryPrefab, nameof(TileFactory));
         PlayerFactory = InstantiatePrefab<PlayerFactory>(_playerFactoryPrefab, nameof(PlayerFactory));
         EnemyFactory = InstantiatePrefab<EnemyFactory>(_enemyFactoryPrefab, nameof(EnemyFactory));

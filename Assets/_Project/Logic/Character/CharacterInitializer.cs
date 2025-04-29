@@ -1,58 +1,32 @@
 ﻿using UnityEngine;
 
+[RequireComponent(typeof(Character))]
 public class CharacterInitializer : MonoBehaviour
 {
-    public static CharacterInitializer Instance { get; private set; }
+    private Character _character;
+    private TilesRepository _tilesRepo;
 
-    
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
+        _character = GetComponent<Character>();
+        _tilesRepo = TilesRepository.Instance;
     }
     
-    private void OnEnable()
+    public void InitializeAtCurrentPosition()
     {
-        PlayerFactory.OnPlayerCreated += OnPlayerCreatedHandler;
-    }
-
-    private void OnDisable()
-    {
-        PlayerFactory.OnPlayerCreated -= OnPlayerCreatedHandler;
-    }
-
-    void OnPlayerCreatedHandler()
-    {
-        SetCurrentTile();
-    }
-
-    private void SetCurrentTile()
-    {
-        Character character = FindObjectOfType<Character>();
-        if (character == null)
-        {
-            Debug.LogError("Character не найден на сцене.");
-            return;
-        }
-
-        Vector2Int position = new Vector2Int(
-            Mathf.RoundToInt(character.transform.position.x),
-            Mathf.RoundToInt(character.transform.position.z)
+        var worldPos = transform.position;
+        Vector2Int gridPos = new Vector2Int(
+            Mathf.RoundToInt(worldPos.x),
+            Mathf.RoundToInt(worldPos.z)
         );
 
-        Tile tile = TilesRepository.Instance.GetTileAt(position);
+        Tile tile = _tilesRepo.GetTileAt(gridPos);
         if (tile == null)
         {
-            Debug.LogError($"Tile не найден в позиции {position}");
+            Debug.LogError($"[CharacterInitializer] Tile not found at {gridPos}");
             return;
         }
 
-        character.CurrentTile = tile;
-        tile.OccupiedCharacter = character;
+        _character.CurrentTile = tile;
     }
 }

@@ -48,12 +48,10 @@ public class TileFactory : MonoBehaviour
     public Transform GenerateRoom()
     {
         ClearTiles();
-
-        // Генерация логической карты
+        
         var layoutGenerator = new RandomRoomLayoutGenerator(rows, columns, minRoomSize, maxRoomSize, fillProbability);
         TileType[,] layout = layoutGenerator.Generate();
-
-        // Создаём контейнер комнаты
+        
         GameObject roomObj = new GameObject("Room");
         roomObj.transform.parent = this.transform;
 

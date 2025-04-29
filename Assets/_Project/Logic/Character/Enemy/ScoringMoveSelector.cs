@@ -13,14 +13,14 @@ using UnityEngine;
 public class ScoringMoveSelector : IEnemyMoveSelector
 {
     // Вероятность атаковать (если игрок в зоне досягаемости)
-    private const float AttackChance = 0.5f;
+    private float _attackChance = 0.5f;
 
     public Tile SelectTile(Enemy enemy, List<Tile> availableTiles)
     {
         if (availableTiles == null || availableTiles.Count == 0)
             return null;
 
-        // 1) Найти игрока и его тайл
+        // Находим игрока и его тайл
         var player = GameObject.FindObjectOfType<Player>();
         if (player == null || player.CurrentTile == null)
         {
@@ -31,11 +31,11 @@ public class ScoringMoveSelector : IEnemyMoveSelector
 
         bool canReachPlayer = availableTiles.Contains(playerTile);
 
-        // 2) Если можем «достать» игрока
+        // Если можем «достать» игрока
         if (canReachPlayer)
         {
             // С вероятностью атакуем
-            if (Random.value < AttackChance)
+            if (Random.value < _attackChance)
             {
                 return playerTile;
             }
