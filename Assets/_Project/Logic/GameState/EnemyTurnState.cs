@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 
@@ -25,6 +26,7 @@ public class EnemyTurnState : IGameState
 
     public void Enter()
     {
+        TileHighlighter.Instance.ClearHighlights();
         DOVirtual.DelayedCall(InitialDelaySeconds, StartNextEnemyMove);
     }
 
@@ -32,51 +34,66 @@ public class EnemyTurnState : IGameState
 
     private void StartNextEnemyMove()
     {
+        // Если все враги сходили — передаём ход игроку
         if (_currentEnemyIndex >= _enemies.Count)
         {
-            var player = GameObject.FindObjectOfType<Player>();
-            var moveLogic = GameObject.FindObjectOfType<HighlighterAwalibleMoves>();
-            var nextState = new PlayerTurnState(_stateMachine, player, moveLogic, _enemies);
+            var player     = GameObject.FindObjectOfType<Player>();
+            var highlighter = player.GetComponent<AvailableMovesHighlighter>();
+
+            TileHighlighter.Instance.ClearHighlights();
+            var nextState = new PlayerTurnState(_stateMachine, player, highlighter, _enemies);
             _stateMachine.ChangeState(nextState);
             return;
         }
 
-        Enemy enemy = _enemies[_currentEnemyIndex];
-        
-        List<Tile> availableTiles = CharacterMoveService.GetAvailableToMoveTiles(enemy);
-        
-        TileHighlightService.HighlightTiles(enemy, availableTiles);
+        var enemy = _enemies[_currentEnemyIndex];
+        var moves = AvailableMovesCalculator.GetAvailableTiles(enemy);
 
-        if (availableTiles == null || availableTiles.Count == 0)
+        // Подсветка доступных для врага тайлов
+        var enemyTiles = moves
+            .Where(t => t.OccupiedCharacter != null && CharacterIdentifier.IsEnemy(enemy, t.OccupiedCharacter))
+            .ToList();
+        var emptyTiles = moves.Except(enemyTiles).ToList();
+
+        TileHighlighter.Instance.ClearHighlights();
+        TileHighlighter.Instance.HighlightEmptyTiles(emptyTiles);
+        TileHighlighter.Instance.HighlightEnemyTiles(enemyTiles);
+
+        // Если враг не может никуда сдвинуться — сразу переходим к следующему
+        if (moves.Count == 0)
         {
             FinishEnemyMove();
             return;
         }
 
-        // Выбираем тайл через ScoringMoveSelector
-        Tile chosenTile = _moveSelector.SelectTile(enemy, availableTiles);
-        Debug.Log($"{enemy.name} chose {chosenTile.Position}");
+        // Выбираем и выполняем ход
+        var chosenTile = _moveSelector.SelectTile(enemy, moves);
         if (chosenTile == null)
         {
             FinishEnemyMove();
             return;
         }
 
-        // Подписываемся на окончание анимации движения
-        var movement = enemy.GetComponent<Movement>();
-        movement.OnMoveFinished += HandleMoveFinished;
+        var mover = enemy.GetComponent<CharacterMover>();
+        
+        mover.OnMoveStarted  += HandleMoveStarted;
+        mover.OnMoveFinished += HandleMoveFinished;
 
-        // Запускаем движение (или атаку через AttackService внутри Movement.Move)
         enemy.Move(chosenTile);
-        Debug.Log($"{enemy.name} moved to {chosenTile.Position}");
     }
 
+    private void HandleMoveStarted()
+    {
+        TileHighlighter.Instance.ClearHighlights();
+        
+        var mover = _enemies[_currentEnemyIndex].GetComponent<CharacterMover>();
+        mover.OnMoveStarted -= HandleMoveStarted;
+    }
+    
     private void HandleMoveFinished()
     {
-        Enemy currentEnemy = _enemies[_currentEnemyIndex];
-        Movement movement = currentEnemy.GetComponent<Movement>();
-        
-        movement.OnMoveFinished -= HandleMoveFinished;
+        var mover = _enemies[_currentEnemyIndex].GetComponent<CharacterMover>();
+        mover.OnMoveFinished -= HandleMoveFinished;
 
         FinishEnemyMove();
     }
@@ -89,6 +106,14 @@ public class EnemyTurnState : IGameState
 
     public void Exit()
     {
+        foreach (var enemy in _enemies)
+        {
+            var mover = enemy.GetComponent<CharacterMover>();
+            mover.OnMoveStarted  -= HandleMoveStarted;
+            mover.OnMoveFinished -= HandleMoveFinished;
+        }
+        
+        TileHighlighter.Instance.ClearHighlights();
         _currentEnemyIndex = 0;
     }
 }

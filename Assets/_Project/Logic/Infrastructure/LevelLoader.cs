@@ -60,12 +60,12 @@ public class LevelLoader : MonoBehaviour
     private void HandleSpawnPointCreated()
     {
         var player = PlayerFactory.Instance.Generate() as Player;
-        var moveLogic = FindObjectOfType<HighlighterAwalibleMoves>();
+        var highlighter = player.GetComponent<AvailableMovesHighlighter>();
         
         List<Enemy> enemies = EnemyFactory.Instance.SpawnEnemies();
 
         // Инициализируем машину состояний стартовым состоянием хода игрока
-        var playerState = new PlayerTurnState(GameStateMachine.Instance, player, moveLogic, enemies);
+        var playerState = new PlayerTurnState(GameStateMachine.Instance, player, highlighter, enemies);
         GameStateMachine.Instance.Initialize(playerState);
     }
 

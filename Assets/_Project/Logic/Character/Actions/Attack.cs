@@ -41,7 +41,7 @@ public static class Attack
             .OrderBy(t => Vector3.Distance(attacker.transform.position, t.transform.position))
             .First();
 
-        var movement = attacker.GetComponent<Movement>();
+        var movement = attacker.GetComponent<CharacterMover>();
         void OnMoveFinished()
         {
             movement.OnMoveFinished -= OnMoveFinished;

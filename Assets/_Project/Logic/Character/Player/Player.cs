@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(Movement))]
+[RequireComponent(typeof(CharacterMover))]
 public class Player : Character
 {
     private void OnEnable()

@@ -3,14 +3,16 @@ using DG.Tweening;
 using UnityEngine;
 
 [RequireComponent(typeof(Character))]
-public class Movement : MonoBehaviour
+public class CharacterMover : MonoBehaviour
 {
+    [SerializeField] private int attackDamage = 10;
     
     [SerializeField] private float _jumpPower = 5f;
     [SerializeField] private int _numJumps = 2;
     [SerializeField] private float _durationOfJump = 1f;
     [SerializeField] private float _durationOfRotate = 0.2f;
     private Character _character;
+    public event Action OnMoveStarted;
     public event Action OnMoveFinished;
     public bool IsMoving { get; set; }
     
@@ -30,20 +32,20 @@ public class Movement : MonoBehaviour
         if(targetTile.IsHighlighted == false)
             return;
         
-        const int attackDamage = 10;
+        
         if (Attack.TryMeleeAttack(_character, targetTile, attackDamage))
         {
-            TileHighlighter.Instance.ClearHighlights();
             OnMoveFinished?.Invoke();
             return;
         }
         
         if (IsMoving == false)
         {
+            OnMoveStarted?.Invoke();
+            
             Vector3 direction = (targetTile.transform.position - _character.transform.position).normalized;
             Vector3 lookAtTarget = _character.transform.position + direction;
             
-            TileHighlighter.Instance.ClearHighlights();
             IsMoving = true;
             _character.CurrentTile = targetTile;
             

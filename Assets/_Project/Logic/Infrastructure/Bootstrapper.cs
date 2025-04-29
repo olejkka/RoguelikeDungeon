@@ -53,9 +53,6 @@ public class Bootstrapper : MonoBehaviour
         TilesRepository = InstantiatePrefab<TilesRepository>(_tilesRepositoryPrefab, nameof(TilesRepository));
         CharacterInitializer = InstantiatePrefab<CharacterInitializer>(_playerInitializer, nameof(CharacterInitializer));
         GameStateMachine = InstantiatePrefab<GameStateMachine>(_gameStateMachine, nameof(GameStateMachine));
-
-        // Инициализируем подсветку
-        TileHighlightService.Init(TileHighlighter);
     }
 
     private void Start()

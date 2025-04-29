@@ -5,12 +5,10 @@ using UnityEngine;
 
 public class PlayerTurnState : IGameState
 {
-    private const float InitialDelaySeconds = 0.5f;
-    
     private Player _player;
     private readonly GameStateMachine _stateMachine;
-    private readonly Movement _movement;
-    private readonly HighlighterAwalibleMoves _moveLogic;
+    private readonly CharacterMover _characterMover;
+    private readonly AvailableMovesHighlighter _moveLogic;
     private readonly List<Enemy> _enemies;
     public static event Action OnSteppingOnATransitionTile;
 
@@ -19,7 +17,7 @@ public class PlayerTurnState : IGameState
     (
         GameStateMachine stateMachine,
         Player player,
-        HighlighterAwalibleMoves moveLogic,
+        AvailableMovesHighlighter moveLogic,
         List<Enemy> enemies
         )
     {
@@ -27,12 +25,12 @@ public class PlayerTurnState : IGameState
         _player = player;
         _moveLogic = moveLogic;
         _enemies = enemies;
-        _movement = player.GetComponent<Movement>();
+        _characterMover = player.GetComponent<CharacterMover>();
     }
 
     public void Enter()
     {
-        DOVirtual.DelayedCall(InitialDelaySeconds, ShowMoves);
+        ShowMoves();
     }
 
     public void Tick()
@@ -41,13 +39,24 @@ public class PlayerTurnState : IGameState
     
     private void ShowMoves()
     {
-        _movement.OnMoveFinished += HandleMoveFinished;
-        _moveLogic.HighlightAvailableToMoveTiles();
+        _characterMover.OnMoveStarted += HandleMoveStarted;
+        _characterMover.OnMoveFinished += HandleMoveFinished;
+        TileHighlighter.Instance.ClearHighlights();
+        _moveLogic.Highlight();
     }
 
+    private void HandleMoveStarted()
+    {
+        _characterMover.OnMoveStarted -= HandleMoveStarted;
+        
+        TileHighlighter.Instance.ClearHighlights();
+    }
+    
     private void HandleMoveFinished()
     {
-        _movement.OnMoveFinished -= HandleMoveFinished;
+        _characterMover.OnMoveFinished -= HandleMoveFinished;
+        
+        TileHighlighter.Instance.ClearHighlights();
 
         if (_player.CurrentTile.Type == TileType.Transition)
         {
@@ -61,6 +70,9 @@ public class PlayerTurnState : IGameState
 
     public void Exit()
     {
-        _movement.OnMoveFinished -= HandleMoveFinished;
+        _characterMover.OnMoveStarted -= HandleMoveStarted;
+        _characterMover.OnMoveFinished -= HandleMoveFinished;
+        
+        TileHighlighter.Instance.ClearHighlights();
     }
 }

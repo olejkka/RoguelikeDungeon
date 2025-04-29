@@ -104,7 +104,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: {fileID: 8484774025298936613}
-  _movement: {fileID: -831337740799535996}
+  characterMover: {fileID: -831337740799535996}
   _neighborTilesSelectionSO: {fileID: 11400000, guid: 315d757c43438e845b6ef726d5afbed8, type: 2}
 --- !u!114 &-831337740799535996
 MonoBehaviour:

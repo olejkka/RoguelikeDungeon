@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Character : MonoBehaviour
 {
     [SerializeField] private Health _health;
-    [SerializeField] private Movement _movement;
+    [FormerlySerializedAs("_movement")] [SerializeField] private CharacterMover characterMover;
     [SerializeField] private NeighborTilesSelectionSO _neighborTilesSelectionSO;
     private Tile _currentTile;
     
@@ -24,8 +25,8 @@ public class Character : MonoBehaviour
 
     public void Move(Tile targetTile)
     {
-        if (_movement != null)
-            _movement.Move(targetTile);
+        if (characterMover != null)
+            characterMover.Move(targetTile);
     }
 
     public void Attack(Tile targetTile)

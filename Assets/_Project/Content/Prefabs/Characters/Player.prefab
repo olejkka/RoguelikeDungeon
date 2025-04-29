@@ -215,9 +215,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4371544132356481068}
   - component: {fileID: 3188708531758172319}
-  - component: {fileID: 4147172584413903466}
   - component: {fileID: 1283142955776033067}
   - component: {fileID: 4004507845227067801}
+  - component: {fileID: 5821498508620325991}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -255,20 +255,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: {fileID: 4004507845227067801}
-  _movement: {fileID: 1283142955776033067}
+  characterMover: {fileID: 1283142955776033067}
   _neighborTilesSelectionSO: {fileID: 11400000, guid: 315d757c43438e845b6ef726d5afbed8, type: 2}
---- !u!114 &4147172584413903466
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2528740651555039304}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9f149f4138247ec9ca78f2299b5ede7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1283142955776033067
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -298,6 +286,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHP: 100
+--- !u!114 &5821498508620325991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2528740651555039304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9f149f4138247ec9ca78f2299b5ede7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tileHighlighter: {fileID: 3354130231263902483, guid: c9f076d3055246640acca73418b47cb3, type: 3}
 --- !u!1 &3023249132096097395
 GameObject:
   m_ObjectHideFlags: 0

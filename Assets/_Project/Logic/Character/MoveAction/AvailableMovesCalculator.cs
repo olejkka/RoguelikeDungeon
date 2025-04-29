@@ -2,9 +2,9 @@
 using System.Linq;
 using UnityEngine;
 
-public static class CharacterMoveService
+public static class AvailableMovesCalculator
 {
-    public static List<Tile> GetAvailableToMoveTiles(Character character)
+    public static List<Tile> GetAvailableTiles(Character character)
     {
         if (character.CurrentTile == null)
             return new List<Tile>();
