@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class TileHighlighter : MonoBehaviour
 {
-    private List<Tile> highlightedTiles = new List<Tile>();
+    private List<Tile> _highlightedTiles = new List<Tile>();
     public static TileHighlighter Instance { get; private set; }
 
     
@@ -29,7 +29,7 @@ public class TileHighlighter : MonoBehaviour
             visuals.highlightEnemyTile?.SetActive(false);
 
             tile.SetHighlighted(true);
-            highlightedTiles.Add(tile);
+            _highlightedTiles.Add(tile);
         }
     }
 
@@ -44,13 +44,13 @@ public class TileHighlighter : MonoBehaviour
             visuals.highlightEnemyTile?.SetActive(true);
 
             tile.SetHighlighted(true);
-            highlightedTiles.Add(tile);
+            _highlightedTiles.Add(tile);
         }
     }
 
     public void ClearHighlights()
     {
-        foreach (var tile in highlightedTiles)
+        foreach (var tile in _highlightedTiles)
         {
             tile.SetHighlighted(false);
 
@@ -64,6 +64,6 @@ public class TileHighlighter : MonoBehaviour
             hover?.ResetHoverEffect();
         }
 
-        highlightedTiles.Clear();
+        _highlightedTiles.Clear();
     }
 }

@@ -39,7 +39,8 @@ public class CharacterMover : MonoBehaviour
         {
             if (strat.TryExecute(this, targetTile))
             {
-                Debug.Log($"{name} Выбрана стратегия {strat.GetType().Name}");
+                // Debug.Log($"{name} Выбрана стратегия {strat.GetType().Name}");
+                
                 if (!IsMoving)
                     OnMoveFinished?.Invoke();
 

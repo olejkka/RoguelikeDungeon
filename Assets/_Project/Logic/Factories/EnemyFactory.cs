@@ -4,6 +4,11 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+/// <summary>
+/// Фабрика создания врагов. Спавнит заданное количество врагов
+/// на точках спавна внутри тайлов (использует child-позицию SpawnPoint),
+/// либо в центре тайла, если SpawnPoint не задан.
+/// </summary>
 public class EnemyFactory : MonoBehaviour
 {
     [SerializeField] private Enemy _enemyPrefab;
@@ -20,14 +25,14 @@ public class EnemyFactory : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
-
+    
     public List<Enemy> SpawnEnemies()
     {
         var enemies = new List<Enemy>();
         Tile spawnTile = FindSpawnTile();
         if (spawnTile == null)
         {
-            Debug.LogWarning("Spawn tile not found.");
+            Debug.LogWarning("Точка спавна не найдена.");
             return enemies;
         }
 
@@ -40,8 +45,14 @@ public class EnemyFactory : MonoBehaviour
             int idx = Random.Range(0, availableTiles.Count);
             Tile tile = availableTiles[idx];
             availableTiles.RemoveAt(idx);
+            
+            Vector3 spawnPosition;
+            if (tile.TryGetSpawnPoint(out Transform spawnPointTransform) && spawnPointTransform != null)
+                spawnPosition = spawnPointTransform.position;
+            else
+                spawnPosition = tile.transform.position;
 
-            var enemy = Instantiate(_enemyPrefab, tile.transform.position, Quaternion.identity);
+            var enemy = Instantiate(_enemyPrefab, spawnPosition, Quaternion.identity);
             
             var initializer = enemy.GetComponent<CharacterInitializer>();
             if (initializer != null)

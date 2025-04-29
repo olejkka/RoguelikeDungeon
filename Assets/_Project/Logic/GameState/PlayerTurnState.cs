@@ -30,7 +30,8 @@ public class PlayerTurnState : IGameState
 
     public void Enter()
     {
-        Debug.Log("Player are now available");
+        // Debug.Log("Player are now available");
+        
         ShowMoves();
     }
 
@@ -75,5 +76,7 @@ public class PlayerTurnState : IGameState
         _characterMover.OnMoveFinished -= HandleMoveFinished;
         
         TileHighlighter.Instance.ClearHighlights();
+        
+        // Debug.Log("Player are now not available");
     }
 }

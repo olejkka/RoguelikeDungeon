@@ -40,12 +40,12 @@ public class DefaultMoveCalculator : MoveCalculator
                 if (tile.OccupiedCharacter != null)
                 {
                     if (CharacterIdentifier.IsEnemy(currentTile.OccupiedCharacter, tile.OccupiedCharacter))
-                        moves.Add(tile); // врага можно атаковать
+                        moves.Add(tile);
 
-                    break; // и враг, и союзник блокируют путь
+                    break;
                 }
 
-                moves.Add(tile); // свободная клетка
+                moves.Add(tile);
             }
         }
 

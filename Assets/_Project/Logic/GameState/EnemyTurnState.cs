@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class EnemyTurnState : IGameState
 {
-    private float _initialDelaySeconds = 0.5f;
-    
     private readonly GameStateMachine _stateMachine;
     private readonly List<Enemy> _enemies;
     private readonly IEnemyMoveSelector _moveSelector;
+    
     private int _currentEnemyIndex;
+    private float _initialDelaySeconds = 0.5f;
     
 
     public EnemyTurnState
@@ -26,7 +26,8 @@ public class EnemyTurnState : IGameState
 
     public void Enter()
     {
-        Debug.Log("Enemies are now available");
+        // Debug.Log("Enemies are now available");
+        
         TileHighlighter.Instance.ClearHighlights();
         DOVirtual.DelayedCall(_initialDelaySeconds, StartNextEnemyMove);
     }
@@ -37,7 +38,7 @@ public class EnemyTurnState : IGameState
     {
         if (_currentEnemyIndex >= _enemies.Count)
         {
-            var player     = GameObject.FindObjectOfType<Player>();
+            var player = GameObject.FindObjectOfType<Player>();
             var highlighter = player.GetComponent<AvailableMovesHighlighter>();
 
             TileHighlighter.Instance.ClearHighlights();
@@ -112,5 +113,7 @@ public class EnemyTurnState : IGameState
         
         TileHighlighter.Instance.ClearHighlights();
         _currentEnemyIndex = 0;
+        
+        // Debug.Log("Enemies are now not available");
     }
 }
