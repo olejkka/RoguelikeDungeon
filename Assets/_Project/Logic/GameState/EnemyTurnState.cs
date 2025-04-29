@@ -26,6 +26,7 @@ public class EnemyTurnState : IGameState
 
     public void Enter()
     {
+        Debug.Log("Enemies are now available");
         TileHighlighter.Instance.ClearHighlights();
         DOVirtual.DelayedCall(_initialDelaySeconds, StartNextEnemyMove);
     }

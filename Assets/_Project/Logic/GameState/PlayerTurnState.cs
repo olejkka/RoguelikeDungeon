@@ -30,6 +30,7 @@ public class PlayerTurnState : IGameState
 
     public void Enter()
     {
+        Debug.Log("Player are now available");
         ShowMoves();
     }
 

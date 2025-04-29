@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.Serialization;
 
+[RequireComponent(typeof(CharacterInitializer))]
+[RequireComponent(typeof(Health))]
+[RequireComponent(typeof(CharacterMover))]
 public class Character : MonoBehaviour
 {
     [SerializeField] private Health _health;
@@ -32,14 +35,5 @@ public class Character : MonoBehaviour
     {
         if (characterMover != null)
             characterMover.Move(targetTile);
-    }
-
-    public void Attack(Tile targetTile)
-    {
-        var target = targetTile.OccupiedCharacter;
-        if (target != null && CharacterIdentifier.IsEnemy(this, target))
-        {
-            target.Health.TakeDamage(10);
-        }
     }
 }

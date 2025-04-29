@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(CharacterMover))]
+[RequireComponent(typeof(AvailableMovesHighlighter))]
 public class Player : Character
 {
     private void OnEnable()

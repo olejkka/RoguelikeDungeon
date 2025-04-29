@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-[RequireComponent(typeof(Character))]
 public class AvailableMovesHighlighter : MonoBehaviour
 {
     TileHighlighter _tileHighlighter;
