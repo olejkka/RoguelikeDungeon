@@ -46,8 +46,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _tilePrefab: {fileID: 2708488578446068642, guid: 08b5cac8cd80c7240a1dade524c8aabe, type: 3}
   _wallTilePrefab: {fileID: 2708488578446068642, guid: 6d9a68730d171c14c9e31f386a265cba, type: 3}
-  columns: 500
-  rows: 500
+  columns: 1000
+  rows: 1000
   spacing: 1
   minRoomSize: 100
   maxRoomSize: 1000

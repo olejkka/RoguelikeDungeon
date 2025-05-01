@@ -5,7 +5,7 @@ using Random = UnityEngine.Random;
 
 public class SpawnPointCreator : MonoBehaviour
 {
-    public static event Action OnSpawnPointCreated;
+    public static event Action SpawnPointCreated;
     public static SpawnPointCreator Instance { get; private set; }
 
     private void Awake()
@@ -22,7 +22,7 @@ public class SpawnPointCreator : MonoBehaviour
     public void CreateSpawnPoint()
     {
         Tile[] availableTiles = FindObjectsOfType<Tile>()
-            .Where(tile => TileRules.IsWalkable(tile))
+            .Where(TileRules.IsWalkable)
             .ToArray();
 
         if (availableTiles.Length == 0)
@@ -34,6 +34,6 @@ public class SpawnPointCreator : MonoBehaviour
         Tile selectedTile = availableTiles[Random.Range(0, availableTiles.Length)];
         selectedTile.Type = TileType.Spawn;
         
-        OnSpawnPointCreated?.Invoke();
+        SpawnPointCreated?.Invoke();
     }
 }

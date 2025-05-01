@@ -5,7 +5,7 @@ using UnityEngine.Serialization;
 
 public class TileFactory : MonoBehaviour
 {
-    public static event Action OnRoomGenerated;
+    public static event Action RoomGenerated;
     public static TileFactory Instance { get; private set; }
 
     
@@ -67,7 +67,7 @@ public class TileFactory : MonoBehaviour
         if (floorPositions.Count == 0)
         {
             Debug.LogWarning("Нет тайлов для комнаты!");
-            OnRoomGenerated?.Invoke();
+            RoomGenerated?.Invoke();
             return roomObj.transform;
         }
 
@@ -109,7 +109,7 @@ public class TileFactory : MonoBehaviour
             }
         }
 
-        OnRoomGenerated?.Invoke();
+        RoomGenerated?.Invoke();
         return roomObj.transform;
     }
 }

@@ -8,31 +8,39 @@ public class PlayerTurnState : IGameState
     private Player _player;
     private readonly GameStateMachine _stateMachine;
     private readonly CharacterMover _characterMover;
-    private readonly AvailableMovesHighlighter _moveLogic;
+    private readonly Health _health;
+    private readonly AvailableMovesHighlighter _availableMovesHighlighter;
     private readonly List<Enemy> _enemies;
-    public static event Action OnSteppingOnATransitionTile;
+    
+    private float _initialDelaySeconds = 0.5f;
+    public static event Action PlayerSteppedOnTheTransitionTile;
 
     
     public PlayerTurnState
     (
         GameStateMachine stateMachine,
         Player player,
-        AvailableMovesHighlighter moveLogic,
+        AvailableMovesHighlighter availableMovesHighlighter,
         List<Enemy> enemies
         )
     {
         _stateMachine = stateMachine;
         _player = player;
-        _moveLogic = moveLogic;
+        _availableMovesHighlighter = availableMovesHighlighter;
         _enemies = enemies;
         _characterMover = player.GetComponent<CharacterMover>();
+        _health = player.GetComponent<Health>();
     }
 
     public void Enter()
     {
-        // Debug.Log("Player are now available");
+        Debug.Log("Player are now available");
         
-        ShowMoves();
+        _characterMover.MovementStarting += DOHandleMoveStarting;
+        _characterMover.MovementFinished += HandleMoveFinished;
+        _health.Dead += HandlePlayerDied;
+        
+        DOVirtual.DelayedCall(_initialDelaySeconds, ShowMoves);
     }
 
     public void Tick()
@@ -41,42 +49,49 @@ public class PlayerTurnState : IGameState
     
     private void ShowMoves()
     {
-        _characterMover.OnMoveStarted += HandleMoveStarted;
-        _characterMover.OnMoveFinished += HandleMoveFinished;
         TileHighlighter.Instance.ClearHighlights();
-        _moveLogic.Highlight();
+        _availableMovesHighlighter.Highlight();
     }
 
-    private void HandleMoveStarted()
+    private void DOHandleMoveStarting()
     {
-        _characterMover.OnMoveStarted -= HandleMoveStarted;
+        _characterMover.MovementStarting -= DOHandleMoveStarting;
         
         TileHighlighter.Instance.ClearHighlights();
     }
     
     private void HandleMoveFinished()
     {
-        _characterMover.OnMoveFinished -= HandleMoveFinished;
+        _characterMover.MovementFinished -= HandleMoveFinished;
         
         TileHighlighter.Instance.ClearHighlights();
 
         if (_player.CurrentTile.Type == TileType.Transition)
         {
-            OnSteppingOnATransitionTile?.Invoke();
+            PlayerSteppedOnTheTransitionTile?.Invoke();
         }
         else
         {
             _stateMachine.ChangeState(new EnemyTurnState(_stateMachine, _enemies));
         }
     }
+    
+    private void HandlePlayerDied()
+    {
+        TileHighlighter.Instance.ClearHighlights();
+        
+        Debug.Log($"{_player.name} вмэр");
+        // _stateMachine.ChangeState(new GameOverState(...));
+    }
 
     public void Exit()
     {
-        _characterMover.OnMoveStarted -= HandleMoveStarted;
-        _characterMover.OnMoveFinished -= HandleMoveFinished;
+        _characterMover.MovementStarting -= DOHandleMoveStarting;
+        _characterMover.MovementFinished -= HandleMoveFinished;
+        _health.Dead -= HandlePlayerDied;
         
         TileHighlighter.Instance.ClearHighlights();
         
-        // Debug.Log("Player are now not available");
+        Debug.Log("Player are now not available");
     }
 }

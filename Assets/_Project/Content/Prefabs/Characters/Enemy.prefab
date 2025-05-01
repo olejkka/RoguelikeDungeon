@@ -187,7 +187,7 @@ PrefabInstance:
     - target: {fileID: 233471385835356860, guid: 2686f22dbbaf61b4cabe48aa6b6c7493, type: 3}
       propertyPath: '_moveStrategiesSO.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: 7d741457740437948a0efe687928a8b4, type: 2}
+      objectReference: {fileID: 11400000, guid: f0795940c8a6d9740a84328b34494a73, type: 2}
     - target: {fileID: 233471385835356860, guid: 2686f22dbbaf61b4cabe48aa6b6c7493, type: 3}
       propertyPath: '_moveStrategiesSO.Array.data[1]'
       value: 

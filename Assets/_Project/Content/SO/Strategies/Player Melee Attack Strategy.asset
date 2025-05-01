@@ -9,9 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c53028743821482c8308b1d1b3eb4de5, type: 3}
-  m_Name: NeighborTilesSelection
+  m_Script: {fileID: 11500000, guid: f2c8067613ef472aa1ac77b21f65ddb5, type: 3}
+  m_Name: Player Melee Attack Strategy
   m_EditorClassIdentifier: 
-  neighborRules:
-  - rectangleWidth: 3
-    rectangleHeight: 3
+  _damage: 100

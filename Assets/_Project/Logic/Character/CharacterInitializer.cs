@@ -15,15 +15,15 @@ public class CharacterInitializer : MonoBehaviour
     public void InitializeAtCurrentPosition()
     {
         var worldPos = transform.position;
-        Vector2Int gridPos = new Vector2Int(
+        Vector2Int tilePos = new Vector2Int(
             Mathf.RoundToInt(worldPos.x),
             Mathf.RoundToInt(worldPos.z)
         );
 
-        Tile tile = _tilesRepo.GetTileAt(gridPos);
+        Tile tile = _tilesRepo.GetTileAt(tilePos);
         if (tile == null)
         {
-            Debug.LogError($"[CharacterInitializer] Tile not found at {gridPos}");
+            Debug.LogError($"[CharacterInitializer] Tile not found at {tilePos}");
             return;
         }
 

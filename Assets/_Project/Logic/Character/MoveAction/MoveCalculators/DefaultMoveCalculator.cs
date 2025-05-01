@@ -41,7 +41,7 @@ public class DefaultMoveCalculator : MoveCalculator
                 {
                     if (CharacterIdentifier.IsEnemy(currentTile.OccupiedCharacter, tile.OccupiedCharacter))
                         moves.Add(tile);
-
+                
                     break;
                 }
 

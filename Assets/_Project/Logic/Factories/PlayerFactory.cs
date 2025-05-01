@@ -5,7 +5,7 @@ using UnityEngine.Serialization;
 public class PlayerFactory : MonoBehaviour
 {
     [SerializeField] private Character _characterPrefab;
-    public static event Action OnPlayerCreated;
+    public static event Action PlayerCreated;
     public static PlayerFactory Instance { get; private set; }
 
     
@@ -16,6 +16,7 @@ public class PlayerFactory : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+        
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
@@ -28,10 +29,11 @@ public class PlayerFactory : MonoBehaviour
             Debug.LogError("Точка спавна не найдена (Tile.IsSpawnPoint == true, но поле _spawnPoint не задано)");
             return null;
         }
+        
         var player = Instantiate(_characterPrefab, spawnPoint.position, Quaternion.identity);
         player.GetComponent<CharacterInitializer>().InitializeAtCurrentPosition();
         
-        OnPlayerCreated?.Invoke();
+        PlayerCreated?.Invoke();
 
         return player;
     }

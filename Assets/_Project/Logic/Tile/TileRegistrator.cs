@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class TileRegistrator : MonoBehaviour
 {
-    public static event Action OnTilesRegistered;
+    public static event Action AllTilesRegistered;
     public static TileRegistrator Instance { get; private set; }
     
     private void Awake()
@@ -19,15 +19,15 @@ public class TileRegistrator : MonoBehaviour
     
     private void OnEnable()
     {
-        TileFactory.OnRoomGenerated += OnRoomGeneratedHandler;
+        TileFactory.RoomGenerated += DORoomGeneratedHandler;
     }
 
     private void OnDisable()
     {
-        TileFactory.OnRoomGenerated -= OnRoomGeneratedHandler;
+        TileFactory.RoomGenerated -= DORoomGeneratedHandler;
     }
 
-    void OnRoomGeneratedHandler()
+    void DORoomGeneratedHandler()
     {
         RegisterAllTiles();
     }
@@ -43,6 +43,6 @@ public class TileRegistrator : MonoBehaviour
             TilesRepository.Instance.RegisterTile(tile, tile.Position);
         }
         
-        OnTilesRegistered?.Invoke();
+        AllTilesRegistered?.Invoke();
     }
 }

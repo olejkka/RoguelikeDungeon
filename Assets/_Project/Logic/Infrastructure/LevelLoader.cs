@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class LevelLoader : MonoBehaviour
 {
     [SerializeField] private CameraController _cameraController;
-    public static LevelLoader Instance { get; private set; }
+    private static LevelLoader Instance { get; set; }
 
     private void Awake()
     {
@@ -21,9 +21,9 @@ public class LevelLoader : MonoBehaviour
 
     private void OnEnable()
     {
-        TileRegistrator.OnTilesRegistered += HandleTilesRegistered;
-        SpawnPointCreator.OnSpawnPointCreated += HandleSpawnPointCreated;
-        PlayerTurnState.OnSteppingOnATransitionTile += ReloadCurrentScene;
+        TileRegistrator.AllTilesRegistered += HandleTilesRegistered;
+        SpawnPointCreator.SpawnPointCreated += HandleSpawnPointCreated;
+        PlayerTurnState.PlayerSteppedOnTheTransitionTile += ReloadCurrentScene;
     }
 
     private void Start()
@@ -33,13 +33,13 @@ public class LevelLoader : MonoBehaviour
 
     private void OnDisable()
     {
-        TileRegistrator.OnTilesRegistered -= HandleTilesRegistered;
-        SpawnPointCreator.OnSpawnPointCreated -= HandleSpawnPointCreated;
-        PlayerTurnState.OnSteppingOnATransitionTile -= ReloadCurrentScene;
+        TileRegistrator.AllTilesRegistered -= HandleTilesRegistered;
+        SpawnPointCreator.SpawnPointCreated -= HandleSpawnPointCreated;
+        PlayerTurnState.PlayerSteppedOnTheTransitionTile -= ReloadCurrentScene;
     }
-    
-    
-    public void LoadNewLevel()
+
+
+    private void LoadNewLevel()
     {
         ClearEntities();
         TilesRepository.Instance.ClearTiles();
@@ -60,12 +60,15 @@ public class LevelLoader : MonoBehaviour
     private void HandleSpawnPointCreated()
     {
         var player = PlayerFactory.Instance.Generate() as Player;
-        var highlighter = player.GetComponent<AvailableMovesHighlighter>();
+        if (player != null)
+        {
+            var highlighter = player.GetComponent<AvailableMovesHighlighter>();
         
-        List<Enemy> enemies = EnemyFactory.Instance.SpawnEnemies();
+            List<Enemy> enemies = EnemyFactory.Instance.SpawnEnemies();
         
-        var playerState = new PlayerTurnState(GameStateMachine.Instance, player, highlighter, enemies);
-        GameStateMachine.Instance.Initialize(playerState);
+            var playerState = new PlayerTurnState(GameStateMachine.Instance, player, highlighter, enemies);
+            GameStateMachine.Instance.Initialize(playerState);
+        }
     }
 
    
