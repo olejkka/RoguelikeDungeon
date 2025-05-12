@@ -22,8 +22,6 @@ public class DeathHandler : MonoBehaviour
     private void HandleDeath()
     {
         var mover = GetComponent<CharacterMover>();
-        if (mover != null)
-            mover.ClearMoveEvents();
         
         transform
             .DOScale(Vector3.zero, _delayBeforeDestroy)

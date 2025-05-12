@@ -21,9 +21,9 @@ public class LevelLoader : MonoBehaviour
 
     private void OnEnable()
     {
-        TileRegistrator.AllTilesRegistered += HandleTilesRegistered;
-        SpawnPointCreator.SpawnPointCreated += HandleSpawnPointCreated;
-        PlayerTurnState.PlayerSteppedOnTheTransitionTile += ReloadCurrentScene;
+        TileFactory.AllTilesInitialized += OnTilesRegistered;
+        SpawnPointCreator.SpawnPointCreated += OnSpawnPointCreated;
+        PlayerTurnState.PlayerSteppedOnTheTransitionTile += OnPlayerSteppedOnTheTransitionTile;
     }
 
     private void Start()
@@ -33,9 +33,9 @@ public class LevelLoader : MonoBehaviour
 
     private void OnDisable()
     {
-        TileRegistrator.AllTilesRegistered -= HandleTilesRegistered;
-        SpawnPointCreator.SpawnPointCreated -= HandleSpawnPointCreated;
-        PlayerTurnState.PlayerSteppedOnTheTransitionTile -= ReloadCurrentScene;
+        TileFactory.AllTilesInitialized -= OnTilesRegistered;
+        SpawnPointCreator.SpawnPointCreated -= OnSpawnPointCreated;
+        PlayerTurnState.PlayerSteppedOnTheTransitionTile -= OnPlayerSteppedOnTheTransitionTile;
     }
 
 
@@ -51,13 +51,13 @@ public class LevelLoader : MonoBehaviour
             _cameraController.SetTarget(roomTransform);
     }
     
-    private void HandleTilesRegistered()
+    private void OnTilesRegistered()
     {
         SpawnPointCreator.Instance.CreateSpawnPoint();
         TransitionPointCreator.Instance.CreateTransitionPoint();
     }
     
-    private void HandleSpawnPointCreated()
+    private void OnSpawnPointCreated()
     {
         var player = PlayerFactory.Instance.Generate() as Player;
         if (player != null)
@@ -82,7 +82,7 @@ public class LevelLoader : MonoBehaviour
             Destroy(enemy.gameObject);
     }
 
-    void ReloadCurrentScene()
+    void OnPlayerSteppedOnTheTransitionTile()
     {
         ClearEntities();
         TilesRepository.Instance.ClearTiles();

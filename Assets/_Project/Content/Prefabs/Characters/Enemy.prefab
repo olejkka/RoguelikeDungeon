@@ -282,8 +282,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: {fileID: 8619648913242318067}
-  characterMover: {fileID: 7190197388128146450}
+  _characterMover: {fileID: 7190197388128146450}
+  _characterAnimation: {fileID: 6160542755265748456}
   _neighborTilesSelectionSO: {fileID: 11400000, guid: 315d757c43438e845b6ef726d5afbed8, type: 2}
+--- !u!114 &6160542755265748456 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3858290128917498694, guid: 2686f22dbbaf61b4cabe48aa6b6c7493, type: 3}
+  m_PrefabInstance: {fileID: 6986704324587853486}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1886308127368654019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b2c701f49a4413283694d905d1d16fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &7190197388128146450 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 233471385835356860, guid: 2686f22dbbaf61b4cabe48aa6b6c7493, type: 3}

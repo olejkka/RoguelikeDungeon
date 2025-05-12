@@ -5,7 +5,6 @@ using UnityEngine.Serialization;
 public class PlayerFactory : MonoBehaviour
 {
     [SerializeField] private Character _characterPrefab;
-    public static event Action PlayerCreated;
     public static PlayerFactory Instance { get; private set; }
 
     
@@ -31,9 +30,6 @@ public class PlayerFactory : MonoBehaviour
         }
         
         var player = Instantiate(_characterPrefab, spawnPoint.position, Quaternion.identity);
-        player.GetComponent<CharacterInitializer>().InitializeAtCurrentPosition();
-        
-        PlayerCreated?.Invoke();
 
         return player;
     }

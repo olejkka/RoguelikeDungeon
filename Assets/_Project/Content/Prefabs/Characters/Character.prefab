@@ -98,7 +98,6 @@ GameObject:
   - component: {fileID: 6059174186585865816}
   - component: {fileID: 1687415634920305245}
   - component: {fileID: 233471385835356860}
-  - component: {fileID: 6119993186362066021}
   - component: {fileID: 1760072506975970100}
   m_Layer: 0
   m_Name: Character
@@ -164,23 +163,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78b106295b344e15b4e8eaaae1e71a6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveStrategiesSO: []
   _jumpPower: 0.25
   _numJumps: 2
   _durationOfJump: 0.5
   _durationOfRotate: 0.2
---- !u!114 &6119993186362066021
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8851897289703373421}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad89bcea769146bb9dd991d3d1b38be1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1760072506975970100
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -13,9 +13,7 @@ public class Bootstrapper : MonoBehaviour
     [SerializeField] private GameObject _spawnPointCreatorPrefab;
     [SerializeField] private GameObject _transitionPointCreatorPrefab;
     [SerializeField] private GameObject _tileHighlighterPrefab;
-    [SerializeField] private GameObject _tileRegistratorPrefab;
     [SerializeField] private GameObject _tilesRepositoryPrefab;
-    [SerializeField] private GameObject _playerInitializer;
     [SerializeField] private GameObject _gameStateMachine;
 
     public static Bootstrapper Instance { get; private set; }
@@ -26,9 +24,7 @@ public class Bootstrapper : MonoBehaviour
     public SpawnPointCreator SpawnPointCreator { get; private set; }
     public TransitionPointCreator TransitionPointCreator { get; private set; }
     public TileHighlighter TileHighlighter { get; private set; }
-    public TileRegistrator TileRegistrator { get; private set; }
     public TilesRepository TilesRepository { get; private set; }
-    public CharacterInitializer CharacterInitializer { get; private set; }
     public GameStateMachine GameStateMachine { get; private set; }
     
 
@@ -48,9 +44,7 @@ public class Bootstrapper : MonoBehaviour
         SpawnPointCreator = InstantiatePrefab<SpawnPointCreator>(_spawnPointCreatorPrefab, nameof(SpawnPointCreator));
         TransitionPointCreator = InstantiatePrefab<TransitionPointCreator>(_transitionPointCreatorPrefab, nameof(TransitionPointCreator));
         TileHighlighter = InstantiatePrefab<TileHighlighter>(_tileHighlighterPrefab, nameof(TileHighlighter));
-        TileRegistrator = InstantiatePrefab<TileRegistrator>(_tileRegistratorPrefab, nameof(TileRegistrator));
         TilesRepository = InstantiatePrefab<TilesRepository>(_tilesRepositoryPrefab, nameof(TilesRepository));
-        CharacterInitializer = InstantiatePrefab<CharacterInitializer>(_playerInitializer, nameof(CharacterInitializer));
         GameStateMachine = InstantiatePrefab<GameStateMachine>(_gameStateMachine, nameof(GameStateMachine));
     }
 

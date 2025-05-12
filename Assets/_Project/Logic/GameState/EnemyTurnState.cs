@@ -79,7 +79,8 @@ public class EnemyTurnState : IGameState
             return;
         }
         
-        var chosenTile = _moveSelector.SelectTile(enemy, moves);
+        Tile chosenTile = _moveSelector.SelectTile(enemy, moves);
+        enemy.TargetTile = chosenTile;
         if (chosenTile == null)
         {
             FinishEnemyMove();
@@ -91,7 +92,8 @@ public class EnemyTurnState : IGameState
         mover.MovementStarting  += DOHandleMoveStarting;
         mover.MovementFinished += HandleMoveFinished;
 
-        enemy.Move(chosenTile);
+        Debug.Log($"Chosen tile: {chosenTile}, OccupiedCharacter - {chosenTile.OccupiedCharacter}");
+        enemy.MoveTo();
     }
 
     private void DOHandleMoveStarting()

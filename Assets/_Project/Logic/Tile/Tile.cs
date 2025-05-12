@@ -33,6 +33,17 @@ public class Tile : MonoBehaviour
         );
     }
 
+    public void RegisterInRepository()
+    {
+        if (TilesRepository.Instance == null)
+        {
+            Debug.LogError("[Tile] TilesRepository не найден. Убедитесь, что Bootstrapper загружает TilesRepository первым.");
+            return;
+        }
+
+        TilesRepository.Instance.RegisterTile(this, Position);
+    }
+
     public bool TryGetSpawnPoint(out Transform point)
     {
         point = _spawnPoint != null ? _spawnPoint.transform : null;

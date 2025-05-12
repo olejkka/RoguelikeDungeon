@@ -2,9 +2,6 @@
 using System.Linq;
 using UnityEngine;
 
-/// <summary>
-/// Выбирает следующий ход для врага, строго в рамках подсвеченных тайлов:
-/// </summary>
 public class ScoringMoveSelector : IEnemyMoveSelector
 {
     private float _attackChance = 0.5f;
@@ -30,8 +27,7 @@ public class ScoringMoveSelector : IEnemyMoveSelector
                 return playerTile;
             }
         }
-
-        // Выбираем ближайший к игроку тайл из availableTiles
+        
         int bestSqr = availableTiles
             .Min(t => (t.Position - playerTile.Position).sqrMagnitude);
 
@@ -39,7 +35,6 @@ public class ScoringMoveSelector : IEnemyMoveSelector
             .Where(t => (t.Position - playerTile.Position).sqrMagnitude == bestSqr)
             .ToList();
 
-        // Если несколько одинаковых по расстоянию — выбираем случайно между ними
         return closest[Random.Range(0, closest.Count)];
     }
 }
