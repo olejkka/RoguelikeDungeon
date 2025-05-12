@@ -99,6 +99,7 @@ GameObject:
   - component: {fileID: 1687415634920305245}
   - component: {fileID: 233471385835356860}
   - component: {fileID: 1760072506975970100}
+  - component: {fileID: 3858290128917498694}
   m_Layer: 0
   m_Name: Character
   m_TagString: Untagged
@@ -136,7 +137,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: {fileID: 0}
-  characterMover: {fileID: 0}
+  _mover: {fileID: 0}
+  _animation: {fileID: 0}
   _neighborTilesSelectionSO: {fileID: 0}
 --- !u!114 &1687415634920305245
 MonoBehaviour:
@@ -163,10 +165,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78b106295b344e15b4e8eaaae1e71a6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _jumpPower: 0.25
-  _numJumps: 2
-  _durationOfJump: 0.5
-  _durationOfRotate: 0.2
 --- !u!114 &1760072506975970100
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,3 +178,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _delayBeforeDestroy: 0
+--- !u!114 &3858290128917498694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8851897289703373421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b2c701f49a4413283694d905d1d16fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _jumpPower: 0.5
+  _numJumps: 1
+  _durationOfJump: 0.5
+  _durationOfRotate: 0.2

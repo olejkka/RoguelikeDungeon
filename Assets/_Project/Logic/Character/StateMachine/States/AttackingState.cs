@@ -1,22 +1,23 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class IdleState : State
+public class AttackingState : State
 {
     private Character _character;
-    public IdleState(IReadOnlyList<ITransition> transitions, Character character) : base(transitions)
+
+    public AttackingState(IReadOnlyList<ITransition> transitions, Character character) : base(transitions)
     {
         _character = character;
     }
 
     public override void Enter()
     {
-        _character.StartIdle();
+        _character.StartAttacking();
     }
 
     public override void Exit()
     {
-        _character.StopAnimation();
+        
     }
 
     public override void Update()

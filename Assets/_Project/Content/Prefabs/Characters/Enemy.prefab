@@ -282,8 +282,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: {fileID: 8619648913242318067}
-  _characterMover: {fileID: 7190197388128146450}
-  _characterAnimation: {fileID: 6160542755265748456}
+  _mover: {fileID: 7190197388128146450}
+  _animation: {fileID: 6160542755265748456}
   _neighborTilesSelectionSO: {fileID: 11400000, guid: 315d757c43438e845b6ef726d5afbed8, type: 2}
 --- !u!114 &6160542755265748456 stripped
 MonoBehaviour:

@@ -192,6 +192,22 @@ PrefabInstance:
       propertyPath: '_moveStrategiesSO.Array.data[1]'
       value: 
       objectReference: {fileID: 11400000, guid: d77bf3dbf54813341836befb311acf0a, type: 2}
+    - target: {fileID: 3858290128917498694, guid: 2686f22dbbaf61b4cabe48aa6b6c7493, type: 3}
+      propertyPath: _numJumps
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3858290128917498694, guid: 2686f22dbbaf61b4cabe48aa6b6c7493, type: 3}
+      propertyPath: _jumpPower
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3858290128917498694, guid: 2686f22dbbaf61b4cabe48aa6b6c7493, type: 3}
+      propertyPath: _durationOfJump
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3858290128917498694, guid: 2686f22dbbaf61b4cabe48aa6b6c7493, type: 3}
+      propertyPath: _durationOfRotate
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 6673756097806247686, guid: 2686f22dbbaf61b4cabe48aa6b6c7493, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -285,8 +301,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: {fileID: 8619648913242318067}
-  _characterMover: {fileID: 7190197388128146450}
-  _characterAnimation: {fileID: 6160542755265748456}
+  _mover: {fileID: 7190197388128146450}
+  _animation: {fileID: 6160542755265748456}
   _neighborTilesSelectionSO: {fileID: 11400000, guid: 315d757c43438e845b6ef726d5afbed8, type: 2}
 --- !u!114 &5052949358739577807
 MonoBehaviour:

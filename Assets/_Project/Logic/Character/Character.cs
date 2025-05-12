@@ -8,17 +8,21 @@ using UnityEngine.Serialization;
 [RequireComponent(typeof(CharacterAnimation))]
 public class Character : MonoBehaviour
 {
+    [SerializeField] private int _attackDamage = 10;
     [SerializeField] private Health _health;
-    [SerializeField] private CharacterMover _characterMover;
-    [SerializeField]private CharacterAnimation _characterAnimation;
+    [SerializeField] private CharacterMover _mover;
+    [SerializeField] private CharacterAnimation _animation;
     [SerializeField] private NeighborTilesSelectionSO _neighborTilesSelectionSO;
     private Tile _currentTile;
     private Tile _targetTile;
     private TilesRepository _tilesRepository;
     private CharacterStateMachine _stateMachine;
-    
-    
+
+
+    public int AttackDamage => _attackDamage;
     public Health Health => _health;
+    public CharacterMover Mover => _mover;
+    public CharacterAnimation Animation => _animation;
     public NeighborTilesSelectionSO NeighborTilesSelectionSO => _neighborTilesSelectionSO;
     public Tile CurrentTile
     {
@@ -38,7 +42,7 @@ public class Character : MonoBehaviour
         get => _targetTile;
         set => _targetTile = value;
     }
-    public bool HasHasTargetTile => _targetTile != null;
+    public bool HasTargetTile => _targetTile != null;
     
     
     void Awake()
@@ -75,19 +79,26 @@ public class Character : MonoBehaviour
         CurrentTile = tile;
     }
     
+    public void StartIdle()
+    {
+        _animation.PlayIdle();
+    }
+    
     public void MoveTo()
     {
-        _characterMover.MoveTo(TargetTile);
+        _mover.MoveToNearestFloor(TargetTile);
         TargetTile = null;
     }
     
-    public void StartBreathing()
+    public void StartAttacking()
     {
-        _characterAnimation.PlayBreathing();
+        _mover.MoveToNearestFloor(TargetTile);
+        TargetTile.OccupiedCharacter.Health.TakeDamage(AttackDamage);
+        Debug.Log($"{TargetTile.OccupiedCharacter.name} take damage. {TargetTile.OccupiedCharacter.Health.CurrentHealth} health");
+        TargetTile = null;
     }
-
     public void StopAnimation()
     {
-        _characterAnimation.StopAnimation();
+        _animation.StopAnimation();
     }
 }

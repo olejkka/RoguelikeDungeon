@@ -15,7 +15,8 @@ public class Player : Character
     
     private void OnTileClicked(Tile clickedTile)
     {
+        if (Mover.IsMoving) return;
+        
         TargetTile = clickedTile;
-        Debug.Log($"Tile {name} clicked!");
     }
 }

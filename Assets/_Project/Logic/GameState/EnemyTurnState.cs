@@ -80,7 +80,6 @@ public class EnemyTurnState : IGameState
         }
         
         Tile chosenTile = _moveSelector.SelectTile(enemy, moves);
-        enemy.TargetTile = chosenTile;
         if (chosenTile == null)
         {
             FinishEnemyMove();
@@ -93,7 +92,8 @@ public class EnemyTurnState : IGameState
         mover.MovementFinished += HandleMoveFinished;
 
         Debug.Log($"Chosen tile: {chosenTile}, OccupiedCharacter - {chosenTile.OccupiedCharacter}");
-        enemy.MoveTo();
+        
+        enemy.TargetTile = chosenTile;
     }
 
     private void DOHandleMoveStarting()
