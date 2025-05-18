@@ -256,6 +256,18 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 8448675285990096782, guid: 2686f22dbbaf61b4cabe48aa6b6c7493, type: 3}
+      propertyPath: m_Color.g
+      value: 0.5294118
+      objectReference: {fileID: 0}
+    - target: {fileID: 8448675285990096782, guid: 2686f22dbbaf61b4cabe48aa6b6c7493, type: 3}
+      propertyPath: m_Color.r
+      value: 0.083329044
+      objectReference: {fileID: 0}
+    - target: {fileID: 8448675285990096782, guid: 2686f22dbbaf61b4cabe48aa6b6c7493, type: 3}
+      propertyPath: m_FillAmount
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8851897289703373421, guid: 2686f22dbbaf61b4cabe48aa6b6c7493, type: 3}
       propertyPath: m_Name
       value: Player
@@ -300,6 +312,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7552ad84da14332baa2d5cd8391d0bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _attackDamage: 20
   _health: {fileID: 8619648913242318067}
   _mover: {fileID: 7190197388128146450}
   _animation: {fileID: 6160542755265748456}

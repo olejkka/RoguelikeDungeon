@@ -8,7 +8,6 @@ public class PlayerTurnState : IGameState
     private Player _player;
     private readonly GameStateMachine _stateMachine;
     private readonly CharacterMover _characterMover;
-    private readonly Health _health;
     private readonly AvailableMovesHighlighter _availableMovesHighlighter;
     private readonly List<Enemy> _enemies;
     
@@ -29,16 +28,14 @@ public class PlayerTurnState : IGameState
         _availableMovesHighlighter = availableMovesHighlighter;
         _enemies = enemies;
         _characterMover = player.GetComponent<CharacterMover>();
-        _health = player.GetComponent<Health>();
     }
 
     public void Enter()
     {
-        Debug.Log("Player are now available");
+        Debug.Log("(PlayerTurnState) Начало хода игрока");
         
         _characterMover.MovementStarting += DOHandleMoveStarting;
         _characterMover.MovementFinished += HandleMoveFinished;
-        _health.Dead += HandlePlayerDied;
         
         DOVirtual.DelayedCall(_initialDelaySeconds, ShowMoves);
     }
@@ -75,23 +72,14 @@ public class PlayerTurnState : IGameState
             _stateMachine.ChangeState(new EnemyTurnState(_stateMachine, _enemies));
         }
     }
-    
-    private void HandlePlayerDied()
-    {
-        TileHighlighter.Instance.ClearHighlights();
-        
-        Debug.Log($"{_player.name} вмэр");
-        // _stateMachine.ChangeState(new GameOverState(...));
-    }
 
     public void Exit()
     {
         _characterMover.MovementStarting -= DOHandleMoveStarting;
         _characterMover.MovementFinished -= HandleMoveFinished;
-        _health.Dead -= HandlePlayerDied;
         
         TileHighlighter.Instance.ClearHighlights();
         
-        Debug.Log("Player are now not available");
+        Debug.Log("(PlayerTurnState) Конец хода игрока");
     }
 }

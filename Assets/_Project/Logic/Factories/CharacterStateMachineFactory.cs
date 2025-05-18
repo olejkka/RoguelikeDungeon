@@ -38,7 +38,7 @@ public static class CharacterStateMachineFactory
     {
         return new List<ITransition>
         {
-            new TransitionTo<IdleState>(() => !character.HasTargetTile || character.TargetTile.OccupiedCharacter == null),
+            new TransitionTo<IdleState>(() => character.HasTargetTile == false || character.TargetTile.OccupiedCharacter == null),
         };
     }
 }

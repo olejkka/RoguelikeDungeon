@@ -13,12 +13,12 @@ public class Character : MonoBehaviour
     [SerializeField] private CharacterMover _mover;
     [SerializeField] private CharacterAnimation _animation;
     [SerializeField] private NeighborTilesSelectionSO _neighborTilesSelectionSO;
+    
     private Tile _currentTile;
     private Tile _targetTile;
     private TilesRepository _tilesRepository;
     private CharacterStateMachine _stateMachine;
-
-
+    
     public int AttackDamage => _attackDamage;
     public Health Health => _health;
     public CharacterMover Mover => _mover;
@@ -37,6 +37,7 @@ public class Character : MonoBehaviour
                 _currentTile.OccupiedCharacter = this;
         }
     }
+    
     public Tile TargetTile
     {
         get => _targetTile;
@@ -77,6 +78,8 @@ public class Character : MonoBehaviour
         }
 
         CurrentTile = tile;
+        
+        Debug.Log($"(Character) {name} завершил инициализацию. CurrentTile {CurrentTile}");
     }
     
     public void StartIdle()
@@ -92,11 +95,25 @@ public class Character : MonoBehaviour
     
     public void StartAttacking()
     {
+        Character target = TargetTile.OccupiedCharacter;
+        
+        void OnMovementFinished()
+        {
+            if (target != null)
+            {
+                target.Health.TakeDamage(AttackDamage);
+                Debug.Log($"{target.name} takes damage. {target.Health.CurrentHealth} health");
+            }
+            _mover.MovementFinished -= OnMovementFinished;
+        }
+        
+        _mover.MovementFinished += OnMovementFinished;
+        
         _mover.MoveToNearestFloor(TargetTile);
-        TargetTile.OccupiedCharacter.Health.TakeDamage(AttackDamage);
-        Debug.Log($"{TargetTile.OccupiedCharacter.name} take damage. {TargetTile.OccupiedCharacter.Health.CurrentHealth} health");
+        
         TargetTile = null;
     }
+
     public void StopAnimation()
     {
         _animation.StopAnimation();

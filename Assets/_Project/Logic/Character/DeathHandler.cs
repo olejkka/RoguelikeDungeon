@@ -1,16 +1,28 @@
-﻿using DG.Tweening;
+﻿using System.Collections.Generic;
+using System.Linq;
+using DG.Tweening;
 using UnityEngine;
 
 [RequireComponent(typeof(Health))]
 public class DeathHandler : MonoBehaviour
 {
     [SerializeField] private float _delayBeforeDestroy = 0f;
+    
     private Health _health;
-    private CharacterMover _characterMover;
+    private Character _character;
+    private List<IDeathListener> _deathListeners;
 
     private void Awake()
     {
-        _health = GetComponent<Health>();
+        if (_health == null)
+        {
+            _health = GetComponent<Health>();
+            _character = GetComponent<Character>();
+            _deathListeners = GetComponentsInChildren<MonoBehaviour>()
+                .OfType<IDeathListener>()
+                .ToList();
+        }
+        
         _health.Dead += HandleDeath;
     }
 
@@ -21,15 +33,24 @@ public class DeathHandler : MonoBehaviour
 
     private void HandleDeath()
     {
-        var mover = GetComponent<CharacterMover>();
+        foreach (var listener in _deathListeners)
+        {
+            listener.OnCharacterDeath(_character);
+        }
+        
+        if (_character is Player)
+        {
+            TileHighlighter.Instance.ClearHighlights();
+            GameStateMachine.Instance.ChangeState(
+                new GameOverState(GameStateMachine.Instance)
+            );
+        }
         
         transform
             .DOScale(Vector3.zero, _delayBeforeDestroy)
-            .SetEase(Ease.InBack);
+            .SetEase(Ease.InBack)
+            .OnComplete(() => Destroy(gameObject));
         
-        DOVirtual.DelayedCall(_delayBeforeDestroy, () =>
-        {
-            Destroy(gameObject);
-        });
+        Debug.Log($"(DeathHandler) Персонаж {_character.name} умер");
     }
 }
