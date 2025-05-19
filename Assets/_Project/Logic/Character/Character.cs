@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [RequireComponent(typeof(Health))]
 [RequireComponent(typeof(CharacterMover))]
+[RequireComponent(typeof(CharacterCombat))]
 [RequireComponent(typeof(CharacterAnimation))]
 public class Character : MonoBehaviour
 {
-    [SerializeField] private int _attackDamage = 10;
     [SerializeField] private Health _health;
     [SerializeField] private CharacterMover _mover;
+    [SerializeField] private CharacterCombat _combat;
     [SerializeField] private CharacterAnimation _animation;
     [SerializeField] private NeighborTilesSelectionSO _neighborTilesSelectionSO;
     
@@ -19,9 +18,9 @@ public class Character : MonoBehaviour
     private TilesRepository _tilesRepository;
     private CharacterStateMachine _stateMachine;
     
-    public int AttackDamage => _attackDamage;
     public Health Health => _health;
     public CharacterMover Mover => _mover;
+    public CharacterCombat Combat => _combat;
     public CharacterAnimation Animation => _animation;
     public NeighborTilesSelectionSO NeighborTilesSelectionSO => _neighborTilesSelectionSO;
     public Tile CurrentTile
@@ -87,35 +86,18 @@ public class Character : MonoBehaviour
         _animation.PlayIdle();
     }
     
-    public void MoveTo()
+    public void StartMoving()
     {
-        _mover.MoveToNearestFloor(TargetTile);
-        TargetTile = null;
+        Mover.MoveToNearestFloor(TargetTile);
     }
     
     public void StartAttacking()
     {
-        Character target = TargetTile.OccupiedCharacter;
-        
-        void OnMovementFinished()
-        {
-            if (target != null)
-            {
-                target.Health.TakeDamage(AttackDamage);
-                Debug.Log($"{target.name} takes damage. {target.Health.CurrentHealth} health");
-            }
-            _mover.MovementFinished -= OnMovementFinished;
-        }
-        
-        _mover.MovementFinished += OnMovementFinished;
-        
-        _mover.MoveToNearestFloor(TargetTile);
-        
-        TargetTile = null;
+        Combat.StartAttack();
     }
 
     public void StopAnimation()
     {
-        _animation.StopAnimation();
+        Animation.StopAnimation();
     }
 }

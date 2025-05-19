@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 
-public class GameStateMachine : MonoBehaviour
+public class GameStateMachine_ : MonoBehaviour
 {
     private IGameState _currentState;
 
-    public static GameStateMachine Instance { get; private set; }
+    public static GameStateMachine_ Instance { get; private set; }
 
     private void Awake()
     {

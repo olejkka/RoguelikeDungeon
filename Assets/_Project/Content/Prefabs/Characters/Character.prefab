@@ -98,6 +98,7 @@ GameObject:
   - component: {fileID: 6059174186585865816}
   - component: {fileID: 1687415634920305245}
   - component: {fileID: 233471385835356860}
+  - component: {fileID: 4055035781250293675}
   - component: {fileID: 1760072506975970100}
   - component: {fileID: 3858290128917498694}
   - component: {fileID: 294327603151218905}
@@ -138,11 +139,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e7548ebc2364e459c1e0e6d98e09baf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _attackDamage: 10
-  _health: {fileID: 0}
-  _mover: {fileID: 0}
-  _animation: {fileID: 0}
-  _neighborTilesSelectionSO: {fileID: 0}
+  _health: {fileID: 1687415634920305245}
+  _mover: {fileID: 233471385835356860}
+  _combat: {fileID: 4055035781250293675}
+  _animation: {fileID: 3858290128917498694}
+  _neighborTilesSelectionSO: {fileID: 11400000, guid: 315d757c43438e845b6ef726d5afbed8, type: 2}
 --- !u!114 &1687415634920305245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,6 +169,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78b106295b344e15b4e8eaaae1e71a6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4055035781250293675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8851897289703373421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 340fe07ecef044f18a940b0d509dfad2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _attackDamage: 10
+  _character: {fileID: 0}
+  _mover: {fileID: 0}
+  _animation: {fileID: 0}
 --- !u!114 &1760072506975970100
 MonoBehaviour:
   m_ObjectHideFlags: 0

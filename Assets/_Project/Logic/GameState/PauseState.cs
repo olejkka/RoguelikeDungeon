@@ -2,10 +2,10 @@
 
 public class PauseState : IGameState
 {
-    private readonly GameStateMachine _stateMachine;
+    private readonly GameStateMachine_ _stateMachine;
     private float _prevTimeScale;
 
-    public PauseState(GameStateMachine stateMachine)
+    public PauseState(GameStateMachine_ stateMachine)
     {
         _stateMachine = stateMachine;
     }

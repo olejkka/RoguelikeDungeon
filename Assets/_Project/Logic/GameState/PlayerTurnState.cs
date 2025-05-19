@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerTurnState : IGameState
 {
     private Player _player;
-    private readonly GameStateMachine _stateMachine;
+    private readonly GameStateMachine_ _stateMachine;
     private readonly CharacterMover _characterMover;
     private readonly AvailableMovesHighlighter _availableMovesHighlighter;
     private readonly List<Enemy> _enemies;
@@ -17,7 +17,7 @@ public class PlayerTurnState : IGameState
     
     public PlayerTurnState
     (
-        GameStateMachine stateMachine,
+        GameStateMachine_ stateMachine,
         Player player,
         AvailableMovesHighlighter availableMovesHighlighter,
         List<Enemy> enemies

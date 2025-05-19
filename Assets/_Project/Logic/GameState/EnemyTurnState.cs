@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class EnemyTurnState : IGameState
 {
-    private readonly GameStateMachine _stateMachine;
+    private readonly GameStateMachine_ _stateMachine;
     private readonly List<Enemy> _enemies;
     private readonly IEnemyMoveSelector _moveSelector;
     private readonly Dictionary<Health, Action> _deathHandlers = new Dictionary<Health, Action>();
@@ -17,7 +17,7 @@ public class EnemyTurnState : IGameState
 
     public EnemyTurnState
     (
-        GameStateMachine stateMachine, 
+        GameStateMachine_ stateMachine, 
         List<Enemy> enemies
         )
     {

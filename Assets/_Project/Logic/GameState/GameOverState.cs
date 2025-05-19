@@ -2,16 +2,16 @@
 
 public class GameOverState : IGameState
 {
-    private readonly GameStateMachine _stateMachine;
+    private readonly GameStateMachine_ _stateMachine;
 
-    public GameOverState(GameStateMachine stateMachine)
+    public GameOverState(GameStateMachine_ stateMachine)
     {
         _stateMachine = stateMachine;
     }
 
     public void Enter()
     {
-        Time.timeScale = 0f;
+        Time.timeScale = 0.15f;
         Debug.Log("Игра окончена");
     }
 

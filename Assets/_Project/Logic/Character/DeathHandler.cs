@@ -41,8 +41,8 @@ public class DeathHandler : MonoBehaviour
         if (_character is Player)
         {
             TileHighlighter.Instance.ClearHighlights();
-            GameStateMachine.Instance.ChangeState(
-                new GameOverState(GameStateMachine.Instance)
+            GameStateMachine_.Instance.ChangeState(
+                new GameOverState(GameStateMachine_.Instance)
             );
         }
         

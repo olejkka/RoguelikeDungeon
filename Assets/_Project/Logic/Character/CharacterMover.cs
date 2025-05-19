@@ -43,6 +43,7 @@ public class CharacterMover : MonoBehaviour
             () => {
                 _character.Animation.PlayMove(finalPos, () => {
                     _character.CurrentTile = targetTile;
+                    _character.TargetTile = null;
                     IsMoving = false;
                     MovementFinished?.Invoke();
                 });
@@ -66,6 +67,7 @@ public class CharacterMover : MonoBehaviour
             {
                 MovementStarting?.Invoke();
                 _character.Animation.PlayRotate(targetTile.transform.position);
+                _character.TargetTile = null;
                 MovementFinished?.Invoke();
                 return;
             }

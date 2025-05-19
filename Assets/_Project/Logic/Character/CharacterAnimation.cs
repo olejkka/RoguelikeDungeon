@@ -32,7 +32,7 @@ public class CharacterAnimation : MonoBehaviour
     
     public Tween PlayRotate(Vector3 targetPosition, TweenCallback onComplete = null)
     {
-        Vector3 direction    = (targetPosition - transform.position).normalized;
+        Vector3 direction = (targetPosition - transform.position).normalized;
         Vector3 lookAtTarget = transform.position + direction;
 
         _rotateTween?.Kill();
@@ -46,14 +46,22 @@ public class CharacterAnimation : MonoBehaviour
         return _rotateTween;
     }
     
-    public void PlayAttack()
+    public void PlayAttack(Vector3 targetPosition)
     {
-        Sequence attackSequence = DOTween.Sequence();
-        attackSequence
-            .Append(transform.DOLocalRotate(new Vector3(15f, 0f, 0f), _durationOfRotate).
-                SetEase(Ease.OutQuad))
-            .Append(transform.DOLocalRotate(Vector3.zero, _durationOfRotate).
-                SetEase(Ease.InQuad));
+        transform.DOLookAt(targetPosition, _durationOfRotate, AxisConstraint.Y)
+            .SetEase(Ease.InOutSine)
+            .OnComplete(() =>
+            {
+                Vector3 currentEuler = transform.localEulerAngles;
+                transform.DOLocalRotate(new Vector3(15f, currentEuler.y, currentEuler.z), _durationOfRotate)
+                    .SetEase(Ease.OutQuad)
+                    .OnComplete(() =>
+                    {
+                        Vector3 returnEuler = transform.localEulerAngles;
+                        transform.DOLocalRotate(new Vector3(0f, returnEuler.y, returnEuler.z), _durationOfRotate)
+                            .SetEase(Ease.InQuad);
+                    });
+            });
     }
     
     public void StopAnimation()

@@ -12,7 +12,7 @@ public class MoveState : State
 
     public override void Enter()
     {
-        _character.MoveTo();
+        _character.StartMoving();
     }
 
     public override void Exit()

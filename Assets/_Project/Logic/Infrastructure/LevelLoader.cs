@@ -66,8 +66,8 @@ public class LevelLoader : MonoBehaviour
         
             List<Enemy> enemies = EnemyFactory.Instance.SpawnEnemies();
         
-            var playerState = new PlayerTurnState(GameStateMachine.Instance, player, highlighter, enemies);
-            GameStateMachine.Instance.Initialize(playerState);
+            var playerState = new PlayerTurnState(GameStateMachine_.Instance, player, highlighter, enemies);
+            GameStateMachine_.Instance.Initialize(playerState);
         }
     }
 

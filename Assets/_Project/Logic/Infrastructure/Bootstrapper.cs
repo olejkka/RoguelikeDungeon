@@ -25,7 +25,7 @@ public class Bootstrapper : MonoBehaviour
     public TransitionPointCreator TransitionPointCreator { get; private set; }
     public TileHighlighter TileHighlighter { get; private set; }
     public TilesRepository TilesRepository { get; private set; }
-    public GameStateMachine GameStateMachine { get; private set; }
+    public GameStateMachine_ GameStateMachine { get; private set; }
     
 
     private void Awake()
@@ -45,7 +45,7 @@ public class Bootstrapper : MonoBehaviour
         TransitionPointCreator = InstantiatePrefab<TransitionPointCreator>(_transitionPointCreatorPrefab, nameof(TransitionPointCreator));
         TileHighlighter = InstantiatePrefab<TileHighlighter>(_tileHighlighterPrefab, nameof(TileHighlighter));
         TilesRepository = InstantiatePrefab<TilesRepository>(_tilesRepositoryPrefab, nameof(TilesRepository));
-        GameStateMachine = InstantiatePrefab<GameStateMachine>(_gameStateMachine, nameof(GameStateMachine));
+        GameStateMachine = InstantiatePrefab<GameStateMachine_>(_gameStateMachine, nameof(GameStateMachine));
     }
 
     private void Start()
