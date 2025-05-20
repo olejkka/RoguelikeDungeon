@@ -7,6 +7,8 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterAnimation))]
 public class Character : MonoBehaviour
 {
+    [SerializeField] private int _remainingActions;
+    
     [SerializeField] private Health _health;
     [SerializeField] private CharacterMover _mover;
     [SerializeField] private CharacterCombat _combat;
@@ -18,6 +20,11 @@ public class Character : MonoBehaviour
     private TilesRepository _tilesRepository;
     private CharacterStateMachine _stateMachine;
     
+    public int RemainingActions 
+    {
+        get => _remainingActions;
+        set => _remainingActions = value;
+    }
     public Health Health => _health;
     public CharacterMover Mover => _mover;
     public CharacterCombat Combat => _combat;
