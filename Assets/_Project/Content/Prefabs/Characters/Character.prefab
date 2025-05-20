@@ -99,7 +99,6 @@ GameObject:
   - component: {fileID: 1687415634920305245}
   - component: {fileID: 233471385835356860}
   - component: {fileID: 4055035781250293675}
-  - component: {fileID: 1760072506975970100}
   - component: {fileID: 3858290128917498694}
   - component: {fileID: 294327603151218905}
   m_Layer: 0
@@ -144,6 +143,7 @@ MonoBehaviour:
   _combat: {fileID: 4055035781250293675}
   _animation: {fileID: 3858290128917498694}
   _neighborTilesSelectionSO: {fileID: 11400000, guid: 315d757c43438e845b6ef726d5afbed8, type: 2}
+  _maxActions: 1
 --- !u!114 &1687415634920305245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -182,22 +182,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _attackDamage: 10
-  _character: {fileID: 0}
-  _mover: {fileID: 0}
-  _animation: {fileID: 0}
---- !u!114 &1760072506975970100
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8851897289703373421}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ee8b67067df4aaab8fcc89a113a314b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _delayBeforeDestroy: 1
 --- !u!114 &3858290128917498694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -214,6 +198,8 @@ MonoBehaviour:
   _numJumps: 1
   _durationOfJump: 0.5
   _durationOfRotate: 0.2
+  _rotateX: 15
+  _durationOfRotateX: 0.1
 --- !u!114 &294327603151218905
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -228,7 +214,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _backgroundImage: {fileID: 8200162353301725799}
   _fillImage: {fileID: 8448675285990096782}
-  _health: {fileID: 1687415634920305245}
+  characterHealth: {fileID: 1687415634920305245}
   _fadeDuration: 0.5
 --- !u!1001 &5429772038221875910
 PrefabInstance:

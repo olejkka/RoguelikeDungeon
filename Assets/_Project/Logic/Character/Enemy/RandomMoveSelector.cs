@@ -9,6 +9,7 @@ public class RandomMoveSelector : IEnemyMoveSelector
             return null;
         
         int idx = Random.Range(0, availableTiles.Count);
+        
         return availableTiles[idx];
     }
 }

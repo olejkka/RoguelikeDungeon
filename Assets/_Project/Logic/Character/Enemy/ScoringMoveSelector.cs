@@ -11,11 +11,13 @@ public class ScoringMoveSelector : IEnemyMoveSelector
         if (availableTiles == null || availableTiles.Count == 0)
             return null;
         
-        var player = GameObject.FindObjectOfType<Player>();
+        var player = UnityEngine.Object.FindObjectOfType<Player>();
+        
         if (player == null || player.CurrentTile == null)
         {
             return new RandomMoveSelector().SelectTile(enemy, availableTiles);
         }
+        
         Tile playerTile = player.CurrentTile;
 
         bool canReachPlayer = availableTiles.Contains(playerTile);

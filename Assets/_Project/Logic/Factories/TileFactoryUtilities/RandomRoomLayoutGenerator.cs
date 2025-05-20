@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Генератор произвольного расположения комнаты. Гарантирует минимум _minSize плит.
-/// </summary>
 public class RandomRoomLayoutGenerator
 {
     private int _rows;

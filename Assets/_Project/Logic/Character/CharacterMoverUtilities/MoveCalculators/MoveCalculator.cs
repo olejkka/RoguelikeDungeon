@@ -8,6 +8,7 @@ public abstract class MoveCalculator
     protected Vector2Int GetDirection(Vector2Int from, Vector2Int to)
     {
         Vector2Int diff = to - from;
+        
         return new Vector2Int(
             diff.x == 0 ? 0 : diff.x / Mathf.Abs(diff.x),
             diff.y == 0 ? 0 : diff.y / Mathf.Abs(diff.y)

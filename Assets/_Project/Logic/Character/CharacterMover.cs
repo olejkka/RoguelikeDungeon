@@ -12,6 +12,7 @@ public class CharacterMover : MonoBehaviour
 
     public bool IsMoving { get; set; }
 
+    
     private void Awake()
     {
         _character = GetComponent<Character>(); 
@@ -19,10 +20,18 @@ public class CharacterMover : MonoBehaviour
 
     public void MoveTo(Tile targetTile)
     {
-        if (IsMoving) return;
+        if (_character.RemainingActions <= 0)
+        {
+            Debug.Log("(CharacterMover) RemainingActions <= 0");
+            return;
+        }
+        
+        if (IsMoving)
+            return;
+        
         if (targetTile == _character.CurrentTile ||
             targetTile.Type == TileType.Wall ||
-            !targetTile.IsHighlighted ||
+            targetTile.IsHighlighted == false ||
             targetTile.OccupiedCharacter != null)
         {
             Debug.Log("(CharacterMover) Movement is not possible");
@@ -44,6 +53,7 @@ public class CharacterMover : MonoBehaviour
                 _character.Animation.PlayMove(finalPos, () => {
                     _character.CurrentTile = targetTile;
                     _character.TargetTile = null;
+                    _character.RemainingActions--;
                     IsMoving = false;
                     MovementFinished?.Invoke();
                 });
@@ -53,7 +63,8 @@ public class CharacterMover : MonoBehaviour
     
     public void MoveToNearestFloor(Tile targetTile)
     {
-        if (IsMoving || targetTile == null) return;
+        if (IsMoving || targetTile == null)
+            return;
         
         var targetPos = targetTile.transform.position;
         
@@ -63,17 +74,20 @@ public class CharacterMover : MonoBehaviour
             var currentPos = currentTile.transform.position;
             var dx = Mathf.Abs(currentPos.x - targetPos.x);
             var dz = Mathf.Abs(currentPos.z - targetPos.z);
+            
             if ((dx <= 1.01f && dz <= 1.01f))
             {
                 MovementStarting?.Invoke();
                 _character.Animation.PlayRotate(targetTile.transform.position);
                 _character.TargetTile = null;
+                _character.RemainingActions--;
                 MovementFinished?.Invoke();
                 return;
             }
         }
         
         var candidates = new System.Collections.Generic.List<Tile>();
+        
         if (targetTile.Type == TileType.Floor &&
             targetTile.OccupiedCharacter == null &&
             targetTile.IsHighlighted)

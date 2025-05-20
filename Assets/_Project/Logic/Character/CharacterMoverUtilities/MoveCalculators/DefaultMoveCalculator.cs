@@ -17,9 +17,11 @@ public class DefaultMoveCalculator : MoveCalculator
 
         foreach (var tile in possibleMoves)
         {
-            if (tile == null) continue;
+            if (tile == null)
+                continue;
 
             Vector2Int direction = GetDirection(currentTile.Position, tile.Position);
+            
             if (directionalMoves.ContainsKey(direction))
             {
                 directionalMoves[direction].Add(tile);

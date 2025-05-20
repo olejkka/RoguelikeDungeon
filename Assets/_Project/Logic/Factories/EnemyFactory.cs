@@ -17,6 +17,7 @@ public class EnemyFactory : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+        
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
@@ -25,6 +26,7 @@ public class EnemyFactory : MonoBehaviour
     {
         var enemies = new List<Enemy>();
         Tile spawnTile = FindSpawnTile();
+        
         if (spawnTile == null)
         {
             Debug.LogWarning("Точка спавна не найдена.");
@@ -42,10 +44,15 @@ public class EnemyFactory : MonoBehaviour
             availableTiles.RemoveAt(idx);
             
             Vector3 spawnPosition;
+            
             if (tile.TryGetSpawnPoint(out Transform spawnPointTransform) && spawnPointTransform != null)
+            {
                 spawnPosition = spawnPointTransform.position;
+            }
             else
+            {
                 spawnPosition = tile.transform.position;
+            }
 
             var enemy = Instantiate(_enemyPrefab, spawnPosition, Quaternion.identity);
 

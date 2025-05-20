@@ -3,13 +3,8 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-/// <summary>
-/// Отвечает за создание и удаление точки перехода на следующий уровень.
-/// Будет размещаться максимально далеко от точки спавна.
-/// </summary>
 public class TransitionPointCreator : MonoBehaviour
 {
-    public static event Action OnTransitionPointCreated;
     public static TransitionPointCreator Instance { get; private set; }
 
     [Header("Transition Material")]
@@ -18,6 +13,7 @@ public class TransitionPointCreator : MonoBehaviour
     private Tile _currentTransitionTile;
     private Material _originalMaterial;
 
+    
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -25,14 +21,11 @@ public class TransitionPointCreator : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+        
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
-
-    /// <summary>
-    /// Создаёт новую точку перехода, предварительно удалив старую.
-    /// Размещается максимально далеко от spawn точки.
-    /// </summary>
+    
     public void CreateTransitionPoint()
     {
         ClearTransitionPoint();
@@ -45,6 +38,7 @@ public class TransitionPointCreator : MonoBehaviour
 
         Tile[] tiles = FindObjectsOfType<Tile>();
         Tile spawnTile = tiles.FirstOrDefault(t => t.Type == TileType.Spawn);
+        
         if (spawnTile == null)
         {
             Debug.LogWarning("Spawn tile not found. Can't place transition point.");
@@ -65,10 +59,12 @@ public class TransitionPointCreator : MonoBehaviour
         float maxDistSq = -1f;
         Tile selected = null;
         Vector2 spawnPos2 = new Vector2(spawnTile.transform.position.x, spawnTile.transform.position.z);
+        
         foreach (var tile in floorTiles)
         {
             Vector2 pos2 = new Vector2(tile.transform.position.x, tile.transform.position.z);
             float distSq = (pos2 - spawnPos2).sqrMagnitude;
+            
             if (distSq > maxDistSq)
             {
                 maxDistSq = distSq;
@@ -81,6 +77,7 @@ public class TransitionPointCreator : MonoBehaviour
 
         // Заменяем материал
         var renderer = selected.GetComponentInChildren<Renderer>();
+        
         if (renderer != null)
         {
             _originalMaterial = renderer.material;
@@ -90,19 +87,15 @@ public class TransitionPointCreator : MonoBehaviour
         {
             Debug.LogWarning("У выбранного тайла нет Renderer для замены материала.");
         }
-
-        OnTransitionPointCreated?.Invoke();
     }
-
-    /// <summary>
-    /// Удаляет предыдущую точку перехода и возвращает плиту в исходное состояние.
-    /// </summary>
+    
     public void ClearTransitionPoint()
     {
         if (_currentTransitionTile != null)
         {
             _currentTransitionTile.Type = TileType.Floor;
             var renderer = _currentTransitionTile.GetComponentInChildren<Renderer>();
+            
             if (renderer != null && _originalMaterial != null)
                 renderer.material = _originalMaterial;
 

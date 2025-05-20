@@ -17,13 +17,15 @@ public class CameraController : MonoBehaviour
     [Tooltip("Скорость вращения при перетаскивании мыши")]
     [SerializeField] private float _rotationSpeed = 3f;
     
-
     private Transform _target;
     private float _yawAngle;
 
+    
     private void Update()
     {
-        if (_target == null) return;
+        if (_target == null)
+            return;
+        
         if (Input.GetMouseButton(1))
         {
             float delta = Input.GetAxis("Mouse X") * _rotationSpeed;
@@ -33,13 +35,16 @@ public class CameraController : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (_target == null) return;
+        if (_target == null)
+            return;
+        
         UpdateCamera();
     }
     
     public void SetTarget(Transform target)
     {
         _target = target;
+        
         if (_target != null)
         {
             InitializeYaw();
@@ -51,8 +56,10 @@ public class CameraController : MonoBehaviour
     {
         Vector3 dir = transform.position - (_target.position + Vector3.up * _height);
         dir.y = 0f;
+        
         if (dir.sqrMagnitude > 0.001f)
             _yawAngle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
+        
         else
             _yawAngle = 0f;
     }

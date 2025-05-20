@@ -8,21 +8,7 @@ public class TileFactory : MonoBehaviour
 {
     public static event Action AllTilesInitialized;
     public static TileFactory Instance { get; private set; }
-
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Debug.LogError("Duplicate TileFactory instance detected.");
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-
-        ValidatePrefabs();
-    }
-
+    
     [FormerlySerializedAs("tilePrefab")]
     [Header("Tile Prefabs")]
     [SerializeField] private GameObject _tilePrefab;
@@ -39,6 +25,22 @@ public class TileFactory : MonoBehaviour
 
     [Header("Room Shape Settings")]
     [SerializeField, Range(0f, 1f)] private float fillProbability = 0.7f;
+    
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Debug.LogError("Duplicate TileFactory instance detected.");
+            Destroy(gameObject);
+            
+            return;
+        }
+        
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        ValidatePrefabs();
+    }
 
     private void ValidatePrefabs()
     {
@@ -70,6 +72,7 @@ public class TileFactory : MonoBehaviour
         roomObj.transform.parent = this.transform;
 
         List<Vector3> floorPositions = GetFloorPositions(layout);
+        
         if (floorPositions.Count == 0)
         {
             Debug.LogWarning("No tiles for the room!");
@@ -107,12 +110,14 @@ public class TileFactory : MonoBehaviour
     {
         float avgX = floorPositions.Average(p => p.x);
         float avgZ = floorPositions.Average(p => p.z);
+        
         return new Vector3(avgX, 0f, avgZ);
     }
 
     private List<Tile> CreateTiles(TileType[,] layout, Transform parent, Vector3 center)
     {
         List<Tile> allTiles = new List<Tile>();
+        
         int width = layout.GetLength(0);
         int depth = layout.GetLength(1);
 
@@ -121,16 +126,20 @@ public class TileFactory : MonoBehaviour
             for (int z = 0; z < depth; z++)
             {
                 TileType type = layout[x, z];
-                if (type == TileType.Empty) continue;
+                if (type == TileType.Empty)
+                    continue;
 
                 GameObject prefab = GetPrefabForTileType(type);
-                if (prefab == null) continue;
+                
+                if (prefab == null)
+                    continue;
 
                 GameObject tileObj = Instantiate(prefab, parent);
                 tileObj.transform.localPosition = new Vector3(x * spacing, 0f, z * spacing) - center;
                 tileObj.name = $"{type}_{x}_{z}";
 
                 var tile = tileObj.GetComponent<Tile>();
+                
                 if (tile != null)
                 {
                     tile.Type = type;

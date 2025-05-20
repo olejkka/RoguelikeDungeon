@@ -25,7 +25,6 @@ public class Bootstrapper : MonoBehaviour
     public TransitionPointCreator TransitionPointCreator { get; private set; }
     public TileHighlighter TileHighlighter { get; private set; }
     public TilesRepository TilesRepository { get; private set; }
-    public GameStateMachine_ GameStateMachine { get; private set; }
     
 
     private void Awake()
@@ -35,6 +34,7 @@ public class Bootstrapper : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+        
         Instance = this;
         DontDestroyOnLoad(gameObject);
         
@@ -45,15 +45,18 @@ public class Bootstrapper : MonoBehaviour
         TransitionPointCreator = InstantiatePrefab<TransitionPointCreator>(_transitionPointCreatorPrefab, nameof(TransitionPointCreator));
         TileHighlighter = InstantiatePrefab<TileHighlighter>(_tileHighlighterPrefab, nameof(TileHighlighter));
         TilesRepository = InstantiatePrefab<TilesRepository>(_tilesRepositoryPrefab, nameof(TilesRepository));
-        GameStateMachine = InstantiatePrefab<GameStateMachine_>(_gameStateMachine, nameof(GameStateMachine));
     }
 
     private void Start()
     {
-        if (!string.IsNullOrEmpty(_mainScene))
+        if (string.IsNullOrEmpty(_mainScene) == false)
+        {
             SceneManager.LoadScene(_mainScene);
+        }
         else
+        {
             Debug.LogError("Bootstrapper: Main Scene is not specified.");
+        }
     }
     
     private T InstantiatePrefab<T>(GameObject prefab, string name) where T : Component
@@ -63,11 +66,13 @@ public class Bootstrapper : MonoBehaviour
             Debug.LogError($"Bootstrapper: Prefab для {typeof(T).Name} не назначен.");
             return null;
         }
+        
         var obj = Instantiate(prefab);
         obj.name = name;
         DontDestroyOnLoad(obj);
 
         var component = obj.GetComponent<T>();
+        
         if (component == null)
             Debug.LogError($"Bootstrapper: Префаб {prefab.name} не содержит компонент {typeof(T).Name}.");
 

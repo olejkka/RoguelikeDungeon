@@ -8,6 +8,7 @@ public class LevelLoader : MonoBehaviour
 {
     [SerializeField] private CameraController _cameraController;
     private static LevelLoader Instance { get; set; }
+    private GameStateMachine _gameStateMachine;
 
     private void Awake()
     {
@@ -23,19 +24,22 @@ public class LevelLoader : MonoBehaviour
     {
         TileFactory.AllTilesInitialized += OnTilesRegistered;
         SpawnPointCreator.SpawnPointCreated += OnSpawnPointCreated;
-        PlayerTurnState.PlayerSteppedOnTheTransitionTile += OnPlayerSteppedOnTheTransitionTile;
     }
 
     private void Start()
     {
         LoadNewLevel();
     }
+    
+    private void Update()
+    {
+        _gameStateMachine?.UpdateState();
+    }
 
     private void OnDisable()
     {
         TileFactory.AllTilesInitialized -= OnTilesRegistered;
         SpawnPointCreator.SpawnPointCreated -= OnSpawnPointCreated;
-        PlayerTurnState.PlayerSteppedOnTheTransitionTile -= OnPlayerSteppedOnTheTransitionTile;
     }
 
 
@@ -60,21 +64,21 @@ public class LevelLoader : MonoBehaviour
     private void OnSpawnPointCreated()
     {
         var player = PlayerFactory.Instance.Generate() as Player;
-        if (player != null)
-        {
-            var highlighter = player.GetComponent<AvailableMovesHighlighter>();
         
-            List<Enemy> enemies = EnemyFactory.Instance.SpawnEnemies();
+        if (player == null) 
+            return;
         
-            var playerState = new PlayerTurnState(GameStateMachine_.Instance, player, highlighter, enemies);
-            GameStateMachine_.Instance.Initialize(playerState);
-        }
+        EnemyFactory.Instance.SpawnEnemies();
+        
+        _gameStateMachine = GameStateMachineFactory.CreateGameStateMachine(player);
+        _gameStateMachine.EnterState<PlayerTurn>();
     }
 
    
     private void ClearEntities()
     {
         var oldPlayer = FindObjectOfType<Player>();
+        
         if (oldPlayer != null)
             Destroy(oldPlayer.gameObject);
 

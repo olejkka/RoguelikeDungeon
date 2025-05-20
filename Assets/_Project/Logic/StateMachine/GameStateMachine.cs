@@ -5,5 +5,6 @@ public class GameStateMachine : StateMachine
 {
     public GameStateMachine(Dictionary<Type, IState> states) : base(states)
     {
+        
     }
 }

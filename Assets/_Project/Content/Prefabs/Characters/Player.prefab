@@ -194,19 +194,19 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: d77bf3dbf54813341836befb311acf0a, type: 2}
     - target: {fileID: 3858290128917498694, guid: 2686f22dbbaf61b4cabe48aa6b6c7493, type: 3}
       propertyPath: _numJumps
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3858290128917498694, guid: 2686f22dbbaf61b4cabe48aa6b6c7493, type: 3}
-      propertyPath: _jumpPower
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 3858290128917498694, guid: 2686f22dbbaf61b4cabe48aa6b6c7493, type: 3}
-      propertyPath: _durationOfJump
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3858290128917498694, guid: 2686f22dbbaf61b4cabe48aa6b6c7493, type: 3}
-      propertyPath: _durationOfRotate
+      propertyPath: _jumpPower
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3858290128917498694, guid: 2686f22dbbaf61b4cabe48aa6b6c7493, type: 3}
+      propertyPath: _durationOfJump
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3858290128917498694, guid: 2686f22dbbaf61b4cabe48aa6b6c7493, type: 3}
+      propertyPath: _durationOfRotate
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 6673756097806247686, guid: 2686f22dbbaf61b4cabe48aa6b6c7493, type: 3}
       propertyPath: m_LocalPosition.x
@@ -317,6 +317,7 @@ MonoBehaviour:
   _combat: {fileID: 6391631645770942725}
   _animation: {fileID: 6160542755265748456}
   _neighborTilesSelectionSO: {fileID: 11400000, guid: 315d757c43438e845b6ef726d5afbed8, type: 2}
+  _maxActions: 1
 --- !u!114 &5052949358739577807
 MonoBehaviour:
   m_ObjectHideFlags: 0

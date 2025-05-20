@@ -23,6 +23,7 @@ public class PlayerFactory : MonoBehaviour
     public Character Generate()
     {
         Transform spawnPoint = FindSpawnPointTransform();
+        
         if (spawnPoint == null)
         {
             Debug.LogError("Точка спавна не найдена (Tile.IsSpawnPoint == true, но поле _spawnPoint не задано)");

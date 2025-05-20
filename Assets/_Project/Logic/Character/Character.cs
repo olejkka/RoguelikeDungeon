@@ -1,35 +1,40 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-[RequireComponent(typeof(Health))]
+[RequireComponent(typeof(CharacterHealth))]
 [RequireComponent(typeof(CharacterMover))]
 [RequireComponent(typeof(CharacterCombat))]
 [RequireComponent(typeof(CharacterAnimation))]
 public class Character : MonoBehaviour
 {
-    [SerializeField] private int _remainingActions;
-    
-    [SerializeField] private Health _health;
+    [SerializeField] private CharacterHealth _health;
     [SerializeField] private CharacterMover _mover;
     [SerializeField] private CharacterCombat _combat;
     [SerializeField] private CharacterAnimation _animation;
     [SerializeField] private NeighborTilesSelectionSO _neighborTilesSelectionSO;
+    
+    [SerializeField] private int _maxActions = 1;
+    private int _remainingActions;
     
     private Tile _currentTile;
     private Tile _targetTile;
     private TilesRepository _tilesRepository;
     private CharacterStateMachine _stateMachine;
     
-    public int RemainingActions 
-    {
-        get => _remainingActions;
-        set => _remainingActions = value;
-    }
-    public Health Health => _health;
+    public bool HasTargetTile => _targetTile != null;
+    public CharacterHealth Health => _health;
     public CharacterMover Mover => _mover;
     public CharacterCombat Combat => _combat;
     public CharacterAnimation Animation => _animation;
     public NeighborTilesSelectionSO NeighborTilesSelectionSO => _neighborTilesSelectionSO;
+    public int MaxActions => _maxActions;
+    public int RemainingActions
+    {
+        get => _remainingActions;
+        set => _remainingActions = value;
+    }
+    
     public Tile CurrentTile
     {
         get => _currentTile;
@@ -37,6 +42,7 @@ public class Character : MonoBehaviour
         {
             if (_currentTile != null && _currentTile.OccupiedCharacter == this)
                 _currentTile.OccupiedCharacter = null;
+            
             _currentTile = value;
             
             if (_currentTile != null)
@@ -49,7 +55,6 @@ public class Character : MonoBehaviour
         get => _targetTile;
         set => _targetTile = value;
     }
-    public bool HasTargetTile => _targetTile != null;
     
     
     void Awake()
@@ -78,6 +83,7 @@ public class Character : MonoBehaviour
         );
         
         Tile tile = _tilesRepository.GetTileAt(tilePos);
+        
         if (tile == null)
         {
             throw new Exception($"[Character] Тайл не найден на позиции {tilePos}");
@@ -95,16 +101,16 @@ public class Character : MonoBehaviour
     
     public void StartMoving()
     {
-        Mover.MoveToNearestFloor(TargetTile);
+        Mover.MoveTo(TargetTile);
     }
     
     public void StartAttacking()
     {
         Combat.StartAttack();
     }
-
-    public void StopAnimation()
+    
+    public void ResetActions()
     {
-        Animation.StopAnimation();
+        RemainingActions = MaxActions;
     }
 }

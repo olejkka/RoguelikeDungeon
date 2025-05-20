@@ -1,16 +1,18 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEngine.Serialization;
 
-[RequireComponent(typeof(Health))]
+[RequireComponent(typeof(CharacterHealth))]
 public class HealthBarUI : MonoBehaviour, IDeathListener
 {
     [Header("UI Elements")]
     [SerializeField] private Image _backgroundImage;
     [SerializeField] private Image _fillImage;
 
+    [FormerlySerializedAs("_health")]
     [Header("Settings")]
-    [SerializeField] private Health _health;
+    [SerializeField] private CharacterHealth characterHealth;
     [SerializeField] private float _fadeDuration = 0.5f;
 
     private Color _bgOriginalColor;
@@ -19,8 +21,8 @@ public class HealthBarUI : MonoBehaviour, IDeathListener
 
     private void Awake()
     {
-        if (_health == null)
-            _health = GetComponent<Health>();
+        if (characterHealth == null)
+            characterHealth = GetComponent<CharacterHealth>();
         
         _bgOriginalColor = _backgroundImage.color;
         _fillOriginalColor = _fillImage.color;
@@ -33,17 +35,17 @@ public class HealthBarUI : MonoBehaviour, IDeathListener
         hiddenFill.a = 0f;
         _fillImage.color = hiddenFill;
         
-        _lastHealth = _health.CurrentHealth;
-        _fillImage.fillAmount = Mathf.Clamp01((float)_lastHealth / _health.MaxHealth);
+        _lastHealth = characterHealth.CurrentHealth;
+        _fillImage.fillAmount = Mathf.Clamp01((float)_lastHealth / characterHealth.MaxHealth);
         
-        _health.HPChanged += OnHPChanged;
+        characterHealth.HPChanged += OnHPChanged;
     }
 
     private void OnDestroy()
     {
-        if (_health != null)
+        if (characterHealth != null)
         {
-            _health.HPChanged -= OnHPChanged;
+            characterHealth.HPChanged -= OnHPChanged;
         }
     }
 

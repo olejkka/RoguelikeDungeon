@@ -9,6 +9,10 @@ public class CharacterAnimation : MonoBehaviour
     [SerializeField] private float _durationOfJump = 0.5f;
     [SerializeField] private float _durationOfRotate = 0.2f;
     
+    [Header("Attack Animation Settings")]
+    [SerializeField] private float _rotateX = 15f;
+    [SerializeField] private float _durationOfRotateX = 0.1f;
+    
     private Tween _idleTween;
     private Tween _rotateTween;
 
@@ -53,12 +57,12 @@ public class CharacterAnimation : MonoBehaviour
             .OnComplete(() =>
             {
                 Vector3 currentEuler = transform.localEulerAngles;
-                transform.DOLocalRotate(new Vector3(15f, currentEuler.y, currentEuler.z), _durationOfRotate)
+                transform.DOLocalRotate(new Vector3(_rotateX, currentEuler.y, currentEuler.z), _durationOfRotateX)
                     .SetEase(Ease.OutQuad)
                     .OnComplete(() =>
                     {
                         Vector3 returnEuler = transform.localEulerAngles;
-                        transform.DOLocalRotate(new Vector3(0f, returnEuler.y, returnEuler.z), _durationOfRotate)
+                        transform.DOLocalRotate(new Vector3(0f, returnEuler.y, returnEuler.z), _durationOfRotateX)
                             .SetEase(Ease.InQuad);
                     });
             });

@@ -8,10 +8,10 @@ public class ClickHandler : MonoBehaviour
     void OnMouseDown()
     {
         Tile tile = GetComponentInParent<Tile>();
-        if (tile != null)
+        
+        if (tile != null && tile.IsHighlighted)
         {
             TileClicked?.Invoke(tile);
-            return;
         }
     }
 }

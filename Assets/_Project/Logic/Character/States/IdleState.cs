@@ -16,7 +16,7 @@ public class IdleState : State
 
     public override void Exit()
     {
-        _character.StopAnimation();
+        
     }
 
     public override void Update()
