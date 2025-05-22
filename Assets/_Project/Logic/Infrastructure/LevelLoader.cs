@@ -6,10 +6,14 @@ using UnityEngine.SceneManagement;
 
 public class LevelLoader : MonoBehaviour
 {
-    [SerializeField] private CameraController _cameraController;
     private static LevelLoader Instance { get; set; }
+    
+    [SerializeField] private CameraController _cameraController;
+    
     private GameStateMachine _gameStateMachine;
+    private Player _player;
 
+    
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -17,6 +21,7 @@ public class LevelLoader : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+        
         Instance = this;
     }
 
@@ -41,8 +46,7 @@ public class LevelLoader : MonoBehaviour
         TileFactory.AllTilesInitialized -= OnTilesRegistered;
         SpawnPointCreator.SpawnPointCreated -= OnSpawnPointCreated;
     }
-
-
+    
     private void LoadNewLevel()
     {
         ClearEntities();
@@ -63,21 +67,25 @@ public class LevelLoader : MonoBehaviour
     
     private void OnSpawnPointCreated()
     {
-        var player = PlayerFactory.Instance.Generate() as Player;
+        _player = PlayerFactory.Instance.Generate() as Player;
         
-        if (player == null) 
+        if (_player == null)
+        {
+            Debug.LogError("LevelLoader: не удалось получить Player из фабрики");
             return;
+        }
+        
+        _player.OnTransitionTileStepped += OnPlayerSteppedOnTheTransitionTile;
         
         EnemyFactory.Instance.SpawnEnemies();
         
-        _gameStateMachine = GameStateMachineFactory.CreateGameStateMachine(player);
+        _gameStateMachine = GameStateMachineFactory.CreateGameStateMachine(_player);
         _gameStateMachine.EnterState<PlayerTurn>();
     }
-
-   
+    
     private void ClearEntities()
     {
-        var oldPlayer = FindObjectOfType<Player>();
+        Player oldPlayer = FindObjectOfType<Player>();
         
         if (oldPlayer != null)
             Destroy(oldPlayer.gameObject);
@@ -88,6 +96,8 @@ public class LevelLoader : MonoBehaviour
 
     void OnPlayerSteppedOnTheTransitionTile()
     {
+        _player.OnTransitionTileStepped -= OnPlayerSteppedOnTheTransitionTile;
+        
         ClearEntities();
         TilesRepository.Instance.ClearTiles();
         TileFactory.Instance.ClearTiles();

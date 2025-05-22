@@ -46,7 +46,8 @@ public class TileFactory : MonoBehaviour
     {
         if (_tilePrefab == null || _wallTilePrefab == null)
         {
-            Debug.LogError("Tile prefabs are not assigned in the inspector.");
+            Debug.LogError("(TileFactory) префабы не назначены!");
+            return;
         }
     }
 

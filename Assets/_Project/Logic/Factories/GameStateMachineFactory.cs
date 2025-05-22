@@ -31,8 +31,8 @@ public static class GameStateMachineFactory
     {
         return new List<ITransition>
         {
-            new TransitionTo<EnemyTurn>(() => character.RemainingActions == 0),
             new TransitionTo<GameOver>(() => character.Health.CurrentHealth <= 0),
+            new TransitionTo<EnemyTurn>(() => character.RemainingActions == 0),
         };
     }
 

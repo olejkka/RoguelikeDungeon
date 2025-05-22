@@ -4,9 +4,10 @@ using UnityEngine.Serialization;
 
 public class PlayerFactory : MonoBehaviour
 {
-    [SerializeField] private Character _characterPrefab;
     public static PlayerFactory Instance { get; private set; }
-
+    
+    [SerializeField] private Player _playerPrefab;
+    
     
     private void Awake()
     {
@@ -30,7 +31,7 @@ public class PlayerFactory : MonoBehaviour
             return null;
         }
         
-        var player = Instantiate(_characterPrefab, spawnPoint.position, Quaternion.identity);
+        Player player = Instantiate(_playerPrefab, spawnPoint.position, Quaternion.identity);
 
         return player;
     }

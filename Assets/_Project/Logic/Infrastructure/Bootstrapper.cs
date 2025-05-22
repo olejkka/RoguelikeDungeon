@@ -14,7 +14,6 @@ public class Bootstrapper : MonoBehaviour
     [SerializeField] private GameObject _transitionPointCreatorPrefab;
     [SerializeField] private GameObject _tileHighlighterPrefab;
     [SerializeField] private GameObject _tilesRepositoryPrefab;
-    [SerializeField] private GameObject _gameStateMachine;
 
     public static Bootstrapper Instance { get; private set; }
 
