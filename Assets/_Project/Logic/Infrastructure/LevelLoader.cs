@@ -75,7 +75,7 @@ public class LevelLoader : MonoBehaviour
             return;
         }
         
-        _player.OnTransitionTileStepped += OnPlayerSteppedOnTheTransitionTile;
+        _player.OnTransitionTileStepped += OnPlayerSteppedOnTransitionTile;
         
         EnemyFactory.Instance.SpawnEnemies();
         
@@ -94,9 +94,9 @@ public class LevelLoader : MonoBehaviour
             Destroy(enemy.gameObject);
     }
 
-    void OnPlayerSteppedOnTheTransitionTile()
+    private void OnPlayerSteppedOnTransitionTile()
     {
-        _player.OnTransitionTileStepped -= OnPlayerSteppedOnTheTransitionTile;
+        _player.OnTransitionTileStepped -= OnPlayerSteppedOnTransitionTile;
         
         ClearEntities();
         TilesRepository.Instance.ClearTiles();

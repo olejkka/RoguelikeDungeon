@@ -3,6 +3,8 @@ using UnityEngine.SceneManagement;
 
 public class Bootstrapper : MonoBehaviour
 {
+    public static Bootstrapper Instance { get; private set; }
+    
     [Header("Scenes")]
     [SerializeField] private string _mainScene = "Main";
 
@@ -14,8 +16,6 @@ public class Bootstrapper : MonoBehaviour
     [SerializeField] private GameObject _transitionPointCreatorPrefab;
     [SerializeField] private GameObject _tileHighlighterPrefab;
     [SerializeField] private GameObject _tilesRepositoryPrefab;
-
-    public static Bootstrapper Instance { get; private set; }
 
     public TileFactory TileFactory { get; private set; }
     public PlayerFactory PlayerFactory { get; private set; }

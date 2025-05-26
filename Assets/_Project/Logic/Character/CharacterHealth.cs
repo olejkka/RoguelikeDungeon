@@ -14,7 +14,6 @@ public class CharacterHealth : MonoBehaviour
     
     public Action<int,int> HPChanged;
     
-
     
     private void Awake()
     {

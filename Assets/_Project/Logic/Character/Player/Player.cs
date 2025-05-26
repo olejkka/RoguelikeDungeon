@@ -23,7 +23,7 @@ public class Player : Character
     {
         if (Mover.IsMoving) return;
         
-        TargetTile = clickedTile;
+        SetTargetTile(clickedTile);
     }
     
     private void OnMovementFinished()

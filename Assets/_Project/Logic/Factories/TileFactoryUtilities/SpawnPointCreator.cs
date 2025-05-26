@@ -33,7 +33,7 @@ public class SpawnPointCreator : MonoBehaviour
         }
 
         Tile selectedTile = availableTiles[Random.Range(0, availableTiles.Length)];
-        selectedTile.Type = TileType.Spawn;
+        selectedTile.SetType(TileType.Spawn);
         
         SpawnPointCreated?.Invoke();
     }

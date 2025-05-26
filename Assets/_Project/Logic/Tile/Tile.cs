@@ -11,11 +11,31 @@ public class Tile : MonoBehaviour
     private Character _occupiedCharacter;
     private TileHighlightVisuals _visuals;
 
-    public Vector2Int Position { get => _position; set => _position = value; }
-    public bool IsHighlighted { get => _isHighlighted; set => _isHighlighted = value; }
-    public Character OccupiedCharacter { get => _occupiedCharacter; set => _occupiedCharacter = value; }
+    public Vector2Int Position => _position;
+    public bool IsHighlighted => _isHighlighted;
+    public Character OccupiedCharacter => _occupiedCharacter;
     public TileHighlightVisuals Visuals => _visuals;
-    public TileType Type { get => _type; set => _type = value; }
+    public TileType Type => _type;
+
+    private void SetPosition(Vector2Int position)
+    {
+        _position = position;
+    }
+
+    public void SetHighlighted(bool state)
+    {
+        _isHighlighted = state;
+    }
+
+    public void SetOccupiedCharacter(Character character)
+    {
+        _occupiedCharacter = character;
+    }
+
+    public void SetType(TileType type)
+    {
+        _type = type;
+    }
 
     private void Awake()
     {
@@ -27,10 +47,10 @@ public class Tile : MonoBehaviour
 
     public void Initialize()
     {
-        Position = new Vector2Int(
+        SetPosition(new Vector2Int(
             Mathf.RoundToInt(transform.position.x),
             Mathf.RoundToInt(transform.position.z)
-        );
+        ));
     }
 
     public void RegisterInRepository()
@@ -38,6 +58,7 @@ public class Tile : MonoBehaviour
         if (TilesRepository.Instance == null)
         {
             Debug.LogError("[Tile] TilesRepository не найден. Убедитесь, что Bootstrapper загружает TilesRepository первым.");
+            
             return;
         }
 
@@ -52,23 +73,19 @@ public class Tile : MonoBehaviour
 
     public List<Tile> GetNeighbors(NeighborTilesSelectionSO settings)
     {
-        if (settings == null) return new List<Tile>();
+        if (settings == null)
+            return new List<Tile>();
 
         var offsets = settings.GetOffsets();
-        List<Tile> result = new List<Tile>();
+        var result = new List<Tile>();
 
         foreach (var offset in offsets)
         {
-            Tile neighbor = TilesRepository.Instance.GetTileAt(Position + offset);
-            if (neighbor != null)
-                result.Add(neighbor);
+            var neighbor = TilesRepository.Instance.GetTileAt(Position + offset);
+            
+            result.Add(neighbor);
         }
 
         return result;
-    }
-
-    public void SetHighlighted(bool state)
-    {
-        IsHighlighted = state;
     }
 }

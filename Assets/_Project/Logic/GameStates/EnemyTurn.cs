@@ -84,7 +84,7 @@ public class EnemyTurn : State
         
         enemy.Mover.MovementFinished += OnActionComplete;
         
-        enemy.TargetTile = chosenTile;
+        enemy.SetTargetTile(chosenTile);
     }
 
     private void FinishEnemyMove()

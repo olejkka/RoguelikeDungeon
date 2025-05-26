@@ -9,9 +9,7 @@ public class ClickHandler : MonoBehaviour
     {
         Tile tile = GetComponentInParent<Tile>();
         
-        if (tile != null && tile.IsHighlighted)
-        {
+        if (tile.IsHighlighted)
             TileClicked?.Invoke(tile);
-        }
     }
 }

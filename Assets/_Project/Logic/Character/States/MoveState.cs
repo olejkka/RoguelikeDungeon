@@ -12,12 +12,14 @@ public class MoveState : State
 
     public override void Enter()
     {
+        Debug.Log("Entering MoveState");
+        
         _character.StartMoving();
     }
 
     public override void Exit()
     {
-        
+        Debug.Log("Exit MoveState");
     }
 
     public override void Update()

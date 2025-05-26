@@ -14,7 +14,7 @@ public class TileHoverHandler : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        if (_parentTile != null && _parentTile.IsHighlighted && _visuals != null)
+        if (_parentTile.IsHighlighted)
         {
             _wasEnemyHighlighted = _visuals.highlightEnemyTile != null && _visuals.highlightEnemyTile.activeSelf;
             _visuals.highlightEmptyTile?.SetActive(false);
@@ -30,7 +30,8 @@ public class TileHoverHandler : MonoBehaviour
 
     public void ResetHoverEffect()
     {
-        if (_visuals == null) return;
+        if (_visuals == null) 
+            return;
 
         _visuals.hoverHighlightTile?.SetActive(false);
 

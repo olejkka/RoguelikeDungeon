@@ -14,6 +14,7 @@ public class TileHighlighter : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+        
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
@@ -23,7 +24,9 @@ public class TileHighlighter : MonoBehaviour
         foreach (var tile in tiles)
         {
             var visuals = tile.Visuals;
-            if (visuals == null) continue;
+            
+            if (visuals == null) 
+                continue;
 
             visuals.highlightEmptyTile?.SetActive(true);
             visuals.highlightEnemyTile?.SetActive(false);
@@ -38,7 +41,9 @@ public class TileHighlighter : MonoBehaviour
         foreach (var tile in tiles)
         {
             var visuals = tile.Visuals;
-            if (visuals == null) continue;
+            
+            if (visuals == null) 
+                continue;
 
             visuals.highlightEmptyTile?.SetActive(false);
             visuals.highlightEnemyTile?.SetActive(true);
@@ -55,7 +60,9 @@ public class TileHighlighter : MonoBehaviour
             tile.SetHighlighted(false);
 
             var visuals = tile.Visuals;
-            if (visuals == null) continue;
+            
+            if (visuals == null) 
+                continue;
 
             visuals.highlightEmptyTile?.SetActive(false);
             visuals.highlightEnemyTile?.SetActive(false);

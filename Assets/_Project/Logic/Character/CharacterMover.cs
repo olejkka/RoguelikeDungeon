@@ -10,7 +10,7 @@ public class CharacterMover : MonoBehaviour
     public event Action MovementStarting;
     public event Action MovementFinished;
 
-    public bool IsMoving { get; set; }
+    public bool IsMoving { get; private set; }
 
     
     private void Awake()
@@ -52,8 +52,8 @@ public class CharacterMover : MonoBehaviour
             () => {
                 _character.Animation.PlayMove(finalPos, () => {
                     _character.CurrentTile = targetTile;
-                    _character.TargetTile = null;
-                    _character.RemainingActions--;
+                    _character.SetTargetTile(null);
+                    _character.ChangeRemainingActions(-1);
                     IsMoving = false;
                     MovementFinished?.Invoke();
                 });
@@ -63,27 +63,25 @@ public class CharacterMover : MonoBehaviour
     
     public void MoveToNearestFloor(Tile targetTile)
     {
-        if (IsMoving || targetTile == null)
+        if (IsMoving)
             return;
         
         var targetPos = targetTile.transform.position;
         
         var currentTile = _character.CurrentTile;
-        if (currentTile != null)
+        
+        var currentPos = currentTile.transform.position;
+        var dx = Mathf.Abs(currentPos.x - targetPos.x);
+        var dz = Mathf.Abs(currentPos.z - targetPos.z);
+        
+        if ((dx <= 1.01f && dz <= 1.01f))
         {
-            var currentPos = currentTile.transform.position;
-            var dx = Mathf.Abs(currentPos.x - targetPos.x);
-            var dz = Mathf.Abs(currentPos.z - targetPos.z);
-            
-            if ((dx <= 1.01f && dz <= 1.01f))
-            {
-                MovementStarting?.Invoke();
-                _character.Animation.PlayRotate(targetTile.transform.position);
-                _character.TargetTile = null;
-                _character.RemainingActions--;
-                MovementFinished?.Invoke();
-                return;
-            }
+            MovementStarting?.Invoke();
+            _character.Animation.PlayRotate(targetTile.transform.position);
+            _character.SetTargetTile(null);
+            _character.ChangeRemainingActions(-1);
+            MovementFinished?.Invoke();
+            return;
         }
         
         var candidates = new System.Collections.Generic.List<Tile>();

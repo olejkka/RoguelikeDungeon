@@ -73,9 +73,8 @@ public class TransitionPointCreator : MonoBehaviour
         }
 
         _currentTransitionTile = selected;
-        selected.Type = TileType.Transition;
-
-        // Заменяем материал
+        selected.SetType(TileType.Transition);
+        
         var renderer = selected.GetComponentInChildren<Renderer>();
         
         if (renderer != null)
@@ -93,7 +92,7 @@ public class TransitionPointCreator : MonoBehaviour
     {
         if (_currentTransitionTile != null)
         {
-            _currentTransitionTile.Type = TileType.Floor;
+            _currentTransitionTile.SetType(TileType.Floor);
             var renderer = _currentTransitionTile.GetComponentInChildren<Renderer>();
             
             if (renderer != null && _originalMaterial != null)

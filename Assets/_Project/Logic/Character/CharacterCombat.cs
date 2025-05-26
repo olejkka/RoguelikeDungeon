@@ -20,12 +20,10 @@ public class CharacterCombat : MonoBehaviour
 
         void OnMovementFinished()
         {
-            if (target != null)
-            {
-                _character.Animation.PlayAttack(target.transform.position);
-                target.Health.TakeDamage(AttackDamage);
-                Debug.Log($"{target.name} takes damage. {target.Health.CurrentHealth} health");
-            }
+            _character.Animation.PlayAttack(target.transform.position);
+            target.Health.TakeDamage(AttackDamage);
+            
+            Debug.Log($"{target.name} takes damage. {target.Health.CurrentHealth} health");
 
             _character.Mover.MovementFinished -= OnMovementFinished;
         }

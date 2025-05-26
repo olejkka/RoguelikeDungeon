@@ -15,8 +15,7 @@ public class Character : MonoBehaviour
     [SerializeField] private NeighborTilesSelectionSO _neighborTilesSelectionSO;
     
     [SerializeField] private int _maxActions = 1;
-    private int _remainingActions;
-    
+
     private Tile _currentTile;
     private Tile _targetTile;
     private TilesRepository _tilesRepository;
@@ -29,31 +28,22 @@ public class Character : MonoBehaviour
     public CharacterAnimation Animation => _animation;
     public NeighborTilesSelectionSO NeighborTilesSelectionSO => _neighborTilesSelectionSO;
     public int MaxActions => _maxActions;
-    public int RemainingActions
-    {
-        get => _remainingActions;
-        set => _remainingActions = value;
-    }
-    
+    public int RemainingActions { get; private set; }
+    public Tile TargetTile => _targetTile;
+
     public Tile CurrentTile
     {
         get => _currentTile;
         set 
         {
             if (_currentTile != null && _currentTile.OccupiedCharacter == this)
-                _currentTile.OccupiedCharacter = null;
+                _currentTile.SetOccupiedCharacter(null);
             
             _currentTile = value;
             
             if (_currentTile != null)
-                _currentTile.OccupiedCharacter = this;
+                _currentTile.SetOccupiedCharacter(this);
         }
-    }
-    
-    public Tile TargetTile
-    {
-        get => _targetTile;
-        set => _targetTile = value;
     }
     
     
@@ -93,6 +83,13 @@ public class Character : MonoBehaviour
         
         Debug.Log($"(Character) {name} завершил инициализацию. CurrentTile {CurrentTile}");
     }
+
+    public void SetTargetTile(Tile targetTile)
+    {
+        _targetTile = targetTile;
+        
+        Debug.Log(TargetTile);
+    }
     
     public void StartIdle()
     {
@@ -107,6 +104,11 @@ public class Character : MonoBehaviour
     public void StartAttacking()
     {
         Combat.StartAttack();
+    }
+
+    public void ChangeRemainingActions(int count)
+    {
+        RemainingActions += count;
     }
     
     public void ResetActions()

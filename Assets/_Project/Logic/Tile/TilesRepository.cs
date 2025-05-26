@@ -4,10 +4,11 @@ using System.Linq;
 
 public class TilesRepository : MonoBehaviour
 {
-    private Dictionary<Vector2Int, Tile> _tiles = new();
     public static TilesRepository Instance { get; private set; }
     
-
+    private Dictionary<Vector2Int, Tile> _tiles = new();
+    
+    
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -15,6 +16,7 @@ public class TilesRepository : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+        
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }

@@ -17,6 +17,7 @@ public class GameOver : State
         var deathListeners = _character.GetComponentsInChildren<MonoBehaviour>()
             .OfType<IDeathListener>()
             .ToList();
+        
         foreach (var listener in deathListeners)
             listener.OnCharacterDeath(_character);
         

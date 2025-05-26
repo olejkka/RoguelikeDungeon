@@ -26,6 +26,7 @@ public class TileFactory : MonoBehaviour
     [Header("Room Shape Settings")]
     [SerializeField, Range(0f, 1f)] private float fillProbability = 0.7f;
     
+    
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -143,7 +144,7 @@ public class TileFactory : MonoBehaviour
                 
                 if (tile != null)
                 {
-                    tile.Type = type;
+                    tile.SetType(type);
                     allTiles.Add(tile);
                 }
             }

@@ -6,9 +6,11 @@ using Random = UnityEngine.Random;
 
 public class EnemyFactory : MonoBehaviour
 {
+    public static EnemyFactory Instance { get; private set; }
+    
     [SerializeField] private Enemy _enemyPrefab;
     [SerializeField] private int _enemyCount = 1;
-    public static EnemyFactory Instance { get; private set; }
+    
 
     private void Awake()
     {
